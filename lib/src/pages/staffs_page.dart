@@ -86,18 +86,10 @@ class _StaffsPageState extends State<StaffsPage> with TickerProviderStateMixin {
   Widget _crearItem(BuildContext context, StaffModel staff) {
     return Card(
       key: ValueKey(staff.id),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
-        //decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: <Color>[
-              Color.fromRGBO(8, 2, 249, 1.0),
-              Color.fromRGBO(239, 90, 38, 1.0)
-            ])),
         child: ListTile(
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -106,7 +98,7 @@ class _StaffsPageState extends State<StaffsPage> with TickerProviderStateMixin {
               decoration: new BoxDecoration(
                   border: new Border(
                       right:
-                          new BorderSide(width: 1.0, color: Colors.white24))),
+                          new BorderSide(width: 1.0, color: Colors.black54))),
               child: Hero(
                   tag: "avatar_" + staff.nombre,
                   child: CircleAvatar(
@@ -118,7 +110,8 @@ class _StaffsPageState extends State<StaffsPage> with TickerProviderStateMixin {
                   ))),
           title: Text(
             staff.nombre,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style:
+                TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
           ),
           subtitle: Row(
             children: <Widget>[
@@ -129,7 +122,7 @@ class _StaffsPageState extends State<StaffsPage> with TickerProviderStateMixin {
                     RichText(
                       text: TextSpan(
                         text: staff.correo,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black54),
                       ),
                       maxLines: 3,
                       softWrap: true,
