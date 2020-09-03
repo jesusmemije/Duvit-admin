@@ -125,7 +125,13 @@ class _HistorialTareasPageState extends State<HistorialTareasPage> with TickerPr
   Widget _crearItem(BuildContext context, TareaModel tarea) {
     return Card(
       key: ValueKey(tarea.idPlaneacion),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5.0),
+                      bottomLeft: Radius.circular(5.0),
+                      bottomRight: Radius.circular(5.0),
+                      topRight: Radius.circular(32.0)),
+      ),
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
@@ -137,6 +143,16 @@ class _HistorialTareasPageState extends State<HistorialTareasPage> with TickerPr
           ),
           subtitle: Row(
             children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(right: 10.0),
+                height: 60,
+                width: 4,
+                decoration: BoxDecoration(
+                  color: DuvitAppTheme.redLight,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(4.0)),
+                ),
+              ),
               new Flexible(
                   child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,14 +189,14 @@ class _HistorialTareasPageState extends State<HistorialTareasPage> with TickerPr
               ),
             ],
           ),
-          trailing: Icon(
+          /*trailing: Icon(
             Icons.group,
             color: Theme.of(context).primaryColor, 
             size: 30.0
           ),
           onTap: () {
             //Navigator.pushNamed(context, 'tareas');
-          },
+          },*/
         ),
       ),
     );
