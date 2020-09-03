@@ -67,7 +67,7 @@ class StaffSearch extends SearchDelegate {
                     fit: BoxFit.contain,
                   ),
                   title: Text(staff.nombre),
-                  subtitle: Text(staff.correo),
+                  subtitle: Text(staff.correoCorporativo),
                   onTap: (){
                     close(context, null);
                     Navigator.pushNamed(context, 'tareas', arguments: staff);

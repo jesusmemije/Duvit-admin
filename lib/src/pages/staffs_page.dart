@@ -110,7 +110,7 @@ class _StaffsPageState extends State<StaffsPage> with TickerProviderStateMixin {
             ),
           title: Text(
             staff.nombre,
-            style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
+            style: DuvitAppTheme.title,
           ),
           subtitle: Row(
             children: <Widget>[
@@ -120,8 +120,8 @@ class _StaffsPageState extends State<StaffsPage> with TickerProviderStateMixin {
                       children: <Widget>[
                     RichText(
                       text: TextSpan(
-                        text: staff.correo,
-                        style: TextStyle(color: Colors.black54),
+                        text: staff.correoCorporativo == '' ? staff.correoCorporativo : staff.correoPersonal,
+                        style: DuvitAppTheme.subtitle,
                       ),
                       maxLines: 3,
                       softWrap: true,

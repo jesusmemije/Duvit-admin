@@ -140,7 +140,7 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
           contentPadding: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10.0, right: 20.0),
           title: Text(
             'Tarea: ${tarea.tarea}',
-            style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
+            style: DuvitAppTheme.title,
           ),
           subtitle: Row(
             children: <Widget>[
@@ -162,7 +162,7 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
                       RichText(
                         text: TextSpan(
                           text: 'Act. ${tarea.actividad}',
-                          style: TextStyle(color: Colors.black54),
+                          style: DuvitAppTheme.caption,
                         ),
                         maxLines: 3,
                         softWrap: true,
@@ -171,7 +171,7 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
                       RichText(
                         text: TextSpan(
                           text: 'Detalle: ${tarea.detalle}',
-                          style: TextStyle(color: Colors.black54),
+                          style: DuvitAppTheme.caption,
                         ),
                         maxLines: 3,
                         softWrap: true,
@@ -180,7 +180,7 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
                       RichText(
                         text: TextSpan(
                           text: 'Proyecto: ${tarea.proyecto}',
-                          style: TextStyle(color: Colors.black54),
+                          style: DuvitAppTheme.caption,
                         ),
                         maxLines: 3,
                         softWrap: true,
