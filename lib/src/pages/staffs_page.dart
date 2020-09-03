@@ -71,7 +71,7 @@ class _StaffsPageState extends State<StaffsPage> with TickerProviderStateMixin {
               top: AppBar().preferredSize.height +
                   MediaQuery.of(context).padding.top +
                   24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
+              bottom: 30 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: staffs.length,
             itemBuilder: (context, i) => _crearItem(context, staffs[i]),
@@ -91,27 +91,26 @@ class _StaffsPageState extends State<StaffsPage> with TickerProviderStateMixin {
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
         child: ListTile(
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           leading: Container(
-              padding: EdgeInsets.only(right: 12.0),
-              decoration: new BoxDecoration(
-                  border: new Border(
-                      right:
-                          new BorderSide(width: 1.0, color: Colors.black54))),
+            padding: EdgeInsets.only(right: 12.0),
+            decoration: new BoxDecoration(
+                border: new Border( right:new BorderSide(width: 1.0, color: Colors.black54))
+              ),
               child: Hero(
-                  tag: "avatar_" + staff.nombre,
-                  child: CircleAvatar(
-                    radius: 32,
-                    backgroundColor: Colors.deepPurple,
-                    backgroundImage: staff.idGenero == 1
+                tag: "avatar_" + staff.nombre,
+                child: CircleAvatar(
+                  radius: 32,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundImage: staff.idGenero == 1
                         ? AssetImage('assets/img/avatar_hombre.png')
                         : AssetImage('assets/img/avatar_mujer.png'),
-                  ))),
+                )
+              )
+            ),
           title: Text(
             staff.nombre,
-            style:
-                TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
           ),
           subtitle: Row(
             children: <Widget>[
@@ -127,13 +126,15 @@ class _StaffsPageState extends State<StaffsPage> with TickerProviderStateMixin {
                       maxLines: 3,
                       softWrap: true,
                     )
-                  ]))
+                  ]
+                )
+              )
             ],
           ),
           trailing:
-              Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
+              Icon(Icons.keyboard_arrow_right, color: Colors.black54, size: 30.0),
           onTap: () {
-            Navigator.pushNamed(context, 'detalles');
+            Navigator.pushNamed(context, 'tareas', arguments: staff);
           },
         ),
       ),

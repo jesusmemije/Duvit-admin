@@ -70,7 +70,7 @@ class StaffSearch extends SearchDelegate {
                   subtitle: Text(staff.correo),
                   onTap: (){
                     close(context, null);
-                    Navigator.pushNamed(context, 'detalles', arguments: staff);
+                    Navigator.pushNamed(context, 'tareas', arguments: staff);
                   },
                 );
               }).toList(),
@@ -93,7 +93,6 @@ class StaffSearch extends SearchDelegate {
             );
 
           }
-
           
         } else {
           return Center(
