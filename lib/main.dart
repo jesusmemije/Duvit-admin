@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:duvit_admin/src/pages/historial_tareas_page.dart';
+import 'package:duvit_admin/src/pages/llamadas_page.dart';
 import 'package:flutter/material.dart';
 import 'package:duvit_admin/src/bloc/provider.dart';
 
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
           'home'             : (BuildContext context) => HomePage(),
           'tareas'           : (BuildContext context) => TareasPage(),
           'historial_tareas' : (BuildContext context) => HistorialTareasPage(),
+          'llamadas'         : (BuildContext context) => LlamadasPage(),
         },
         /*theme: ThemeData(
           primaryColor: Color.fromRGBO( 148, 40, 142, 1),
