@@ -68,7 +68,7 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-                icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
+                icon: Icon(Icons.alternate_email, color: Theme.of(context).primaryColor),
                 hintText: 'ejemplo@correo.com',
                 labelText: 'Correo electrónico',
                 counterText: snapshot.data,
@@ -89,7 +89,7 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             obscureText: true,
             decoration: InputDecoration(
-                icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
+                icon: Icon(Icons.lock_outline, color: Theme.of(context).primaryColor),
                 labelText: 'Contraseña',
                 counterText: snapshot.data,
                 errorText: snapshot.error),
@@ -116,7 +116,7 @@ class LoginPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0)),
             elevation: 0.0,
-            color: Colors.deepPurple,
+            color: Theme.of(context).primaryColor,
             textColor: Colors.white,
             onPressed: snapshot.hasData ? () => _login(bloc, context) : null);
       },
@@ -126,7 +126,7 @@ class LoginPage extends StatelessWidget {
   Widget _crearFondo(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final fondoModaro = Container(
+    final fondo = Container(
       height: size.height * 0.4,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -134,8 +134,8 @@ class LoginPage extends StatelessWidget {
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
             colors: <Color>[
-              Color.fromRGBO(8, 2, 249, 1.0),
-              Color.fromRGBO(239, 90, 38, 1.0)
+              Theme.of(context).primaryColor,
+              Theme.of(context).primaryColorDark
             ])
       ),
     );
@@ -150,7 +150,7 @@ class LoginPage extends StatelessWidget {
 
     return Stack(
       children: <Widget>[
-        fondoModaro,
+        fondo,
         Positioned(top: 90.0, left: 30.0, child: circulo),
         Positioned(top: -40.0, right: -30.0, child: circulo),
         Positioned(bottom: -50.0, right: -10.0, child: circulo),

@@ -1,7 +1,9 @@
 import 'package:duvit_admin/duvit_app_theme.dart';
-import 'package:duvit_admin/src/providers/staffs_provider.dart';
+import 'package:duvit_admin/src/models/llamada_pendiente_model.dart';
+import 'package:duvit_admin/src/providers/llamadas_pendientes_provider.dart';
 import 'package:duvit_admin/src/search/contacto_search.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LlamadasPage extends StatefulWidget {
 
@@ -10,7 +12,8 @@ class LlamadasPage extends StatefulWidget {
 }
 
 class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMixin {
-  final staffsProvider = new StaffsProvider();
+
+  final llamadasPendientesProvider = new LlamadasPendientesProvider();
 
   ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
@@ -46,12 +49,77 @@ class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMix
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        //_crearListado(),
+        _crearListado(),
         _getAppBarUI(),
         SizedBox(
           height: MediaQuery.of(context).padding.bottom,
         ),
       ],
+    );
+  }
+
+  Widget _crearListado() {
+    return FutureBuilder(
+      future: llamadasPendientesProvider.mostrarLlamadasPendientesActivas(),
+      builder: (BuildContext context, AsyncSnapshot<List<LlamadaPendienteModel>> snapshot) {
+
+        final llamadasPendientes = snapshot.data;
+        if (snapshot.hasData) {
+          return ListView.builder(
+            controller: scrollController,
+            padding: EdgeInsets.only(
+              top: AppBar().preferredSize.height +
+                  MediaQuery.of(context).padding.top +
+                  24,
+              bottom: 30 + MediaQuery.of(context).padding.bottom,
+            ),
+            itemCount: llamadasPendientes.length,
+            itemBuilder: (context, i) => _crearItem(context, llamadasPendientes[i]),
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget _crearItem(BuildContext context, LlamadaPendienteModel llamadasPendientes) {
+    return Card(
+      key: ValueKey(llamadasPendientes.id),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      elevation: 8.0,
+      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+      child: Container(
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          title: Text(
+            llamadasPendientes.nombre,
+            style: DuvitAppTheme.title,
+          ),
+          subtitle: Row(
+            children: <Widget>[
+              new Flexible(
+                  child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                    RichText(
+                      text: TextSpan(
+                        text: llamadasPendientes.celular,
+                        style: DuvitAppTheme.subtitle,
+                      ),
+                      maxLines: 3,
+                      softWrap: true,
+                    )
+                  ]
+                )
+              )
+            ],
+          ),
+          trailing:
+              Icon(Icons.call, color: Theme.of(context).primaryColor, size: 30.0),
+          onTap: () => launch("tel://${llamadasPendientes.celular}")
+        ),
+      ),
     );
   }
 

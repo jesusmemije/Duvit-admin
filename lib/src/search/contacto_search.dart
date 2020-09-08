@@ -1,11 +1,14 @@
+import 'package:duvit_admin/duvit_app_theme.dart';
 import 'package:duvit_admin/src/models/contacto_model.dart';
 import 'package:duvit_admin/src/providers/contactos_provider.dart';
+import 'package:duvit_admin/src/providers/llamadas_pendientes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactoSearch extends SearchDelegate {
 
-  final contactosProvider = new ContactosProvider();
+  final contactosProvider          = new ContactosProvider();
+  final llamadasPendientesProvider = new LlamadasPendientesProvider();
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -60,22 +63,46 @@ class ContactoSearch extends SearchDelegate {
             return ListView(
               children: contactos.map( (contacto) {
                 return ListTile(
-                  leading: new FlatButton(
-                    onPressed: () => launch("tel://${ contacto.celular == '' ? contacto.telefonoCelular : contacto.celular }"),
-                    child: new Icon(
-                      Icons.call,
-                      size: 30.0,
-                      color: Theme.of(context).primaryColor,
-                    )
+                  leading: Container(
+                    width: 60.0,
+                    child: new FlatButton(
+                      onPressed: () => launch("tel://${ contacto.celular == '' ? contacto.telefonoCelular : contacto.celular }"),
+                      child: new Icon(
+                        Icons.call,
+                        size: 30.0,
+                        color: Theme.of(context).primaryColor,
+                      )
+                    ),
                   ),
                   title: Text(contacto.nombreCompleto),
-                  subtitle: Text(contacto.tipo),
-                  onTap: (){
-                    /*close(context, null);
-                    Navigator.pushNamed(context, 'agregar_recordatorio', arguments: contacto);*/
-                  },
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right, color: Colors.black54, size: 30.0
+                  subtitle: Text(
+                    contacto.tipo + " - " + "${ contacto.celular == '' ? contacto.telefonoCelular : contacto.celular }",
+                  ),
+                  trailing: Container(
+                    width: 60.0,
+                    child: new FlatButton(
+                      onPressed: (){
+                        final code = llamadasPendientesProvider.crearLlamadaPendiente( contacto );
+                        code.then((value) {
+
+                          if( value ){
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Text("Agregado a la lista de llamadas pendientes"),
+                            ));
+                          } else {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Text("Hemos tenido un problema interno, intente nuevamente por favor."),
+                            ));
+                          }
+
+                        });
+                      },
+                      child: new Icon(
+                        Icons.notifications,
+                        size: 30.0,
+                        color: DuvitAppTheme.grey,
+                      )
+                    ),
                   ),
                 );
               }).toList(),

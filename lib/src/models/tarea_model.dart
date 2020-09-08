@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final tareasModel = tareasModelFromJson(jsonString);
-
 import 'dart:convert';
 
 TareaModel tareasModelFromJson(String str) => TareaModel.fromJson(json.decode(str));
