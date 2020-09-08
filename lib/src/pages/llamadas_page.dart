@@ -65,17 +65,46 @@ class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMix
 
         final llamadasPendientes = snapshot.data;
         if (snapshot.hasData) {
-          return ListView.builder(
-            controller: scrollController,
-            padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
-              bottom: 30 + MediaQuery.of(context).padding.bottom,
-            ),
-            itemCount: llamadasPendientes.length,
-            itemBuilder: (context, i) => _crearItem(context, llamadasPendientes[i]),
-          );
+
+          if ( llamadasPendientes.isNotEmpty ) {
+
+            return ListView.builder(
+              controller: scrollController,
+              padding: EdgeInsets.only(
+                top: AppBar().preferredSize.height +
+                    MediaQuery.of(context).padding.top +
+                    24,
+                bottom: 30 + MediaQuery.of(context).padding.bottom,
+              ),
+              itemCount: llamadasPendientes.length,
+              itemBuilder: (context, i) => _crearItem(context, llamadasPendientes[i]),
+            );
+
+          } else {
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.done,
+                      color: DuvitAppTheme.lightText,
+                      size: 40.0,
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      'No tiene llamadas pendientes',
+                      style: TextStyle(color: DuvitAppTheme.lightText),
+                    ),
+                  ],
+                ),
+              ],
+            );
+
+          }
+
         } else {
           return Center(child: CircularProgressIndicator());
         }
@@ -90,34 +119,93 @@ class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMix
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
-        child: ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          title: Text(
-            llamadasPendientes.nombre,
-            style: DuvitAppTheme.title,
+        child: Dismissible(
+          key: UniqueKey(),
+          background: Container(
+            color: Colors.green,
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                children: [
+                  Icon(Icons.call, color: Colors.white),
+                  Text(' Llamar', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
           ),
-          subtitle: Row(
-            children: <Widget>[
-              new Flexible(
-                  child: new Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                    RichText(
-                      text: TextSpan(
-                        text: llamadasPendientes.celular,
-                        style: DuvitAppTheme.subtitle,
+          secondaryBackground: Container(
+            color: Colors.red,
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(Icons.delete, color: Colors.white),
+                  Text('Eliminar', style: TextStyle(color: Colors.white))
+                ],
+              ),
+            ),
+          ),
+          onDismissed: ( direction ) {
+
+            if ( direction == DismissDirection.startToEnd ) {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text("Llamando..."),
+              ));
+              launch("tel://${ llamadasPendientes.celular }");
+              setState(() {});
+            }
+
+            if ( direction == DismissDirection.endToStart ) {
+              final code = llamadasPendientesProvider.deleteLlamadaPendiente(llamadasPendientes.id);
+              code.then((value) {
+                
+                if( value ){
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text("Llamada pendiente eliminada correctamente"),
+                  ));
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text("Hemos tenido un problema interno, no eliminado."),
+                  ));
+                }
+              });
+            }
+
+          },
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            title: Text(
+              llamadasPendientes.nombre,
+              style: DuvitAppTheme.title,
+            ),
+            subtitle: Row(
+              children: <Widget>[
+                new Flexible(
+                    child: new Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                      RichText(
+                        text: TextSpan(
+                          text: llamadasPendientes.tipo + " - " + llamadasPendientes.celular,
+                          style: DuvitAppTheme.subtitle,
+                        )
                       ),
-                      maxLines: 3,
-                      softWrap: true,
-                    )
-                  ]
+                      RichText(
+                        text: TextSpan(
+                          text: llamadasPendientes.fecha,
+                          style: DuvitAppTheme.subtitle,
+                        )
+                      ),
+                    ]
+                  )
                 )
-              )
-            ],
+              ],
+            ),
+            trailing:
+                Icon(Icons.call, color: Theme.of(context).primaryColor, size: 30.0),
+            onTap: () => launch("tel://${llamadasPendientes.celular}")
           ),
-          trailing:
-              Icon(Icons.call, color: Theme.of(context).primaryColor, size: 30.0),
-          onTap: () => launch("tel://${llamadasPendientes.celular}")
         ),
       ),
     );

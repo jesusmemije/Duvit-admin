@@ -28,12 +28,8 @@ class LlamadasPendientesProvider {
 
     final url = '$_url/llamadas-pendientes.php';
     final resp = await http.get( url );
-
-    print(resp.body);
   
     final Map<String, dynamic> decodedData = json.decode(resp.body);
-
-    print(decodedData);
 
     final List<LlamadaPendienteModel> llamadasPendientes = new List();
 
@@ -46,6 +42,21 @@ class LlamadasPendientesProvider {
     });
 
     return llamadasPendientes;
+
+  }
+
+  Future<bool> deleteLlamadaPendiente( String id ) async {
+
+    final url = '$_url/llamadas-pendientes.php?iddelete=$id';
+    final resp = await http.get( url );
+
+    final Map<String, dynamic> decodedData = json.decode(resp.body);
+
+    if ( decodedData['code'] == '201' ) {
+      return true;
+    } else {
+      return false;
+    }
 
   }
 

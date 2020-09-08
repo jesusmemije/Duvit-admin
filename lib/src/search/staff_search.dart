@@ -1,3 +1,4 @@
+import 'package:duvit_admin/duvit_app_theme.dart';
 import 'package:duvit_admin/src/models/staff_model.dart';
 import 'package:duvit_admin/src/providers/staffs_provider.dart';
 import 'package:flutter/material.dart';
@@ -84,12 +85,19 @@ class StaffSearch extends SearchDelegate {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.cloud_off),
-                    Text('No se encontraron datos relacionados'),
+                    Icon(
+                      Icons.cloud_off,
+                      color: DuvitAppTheme.lightText,
+                      size: 40.0,
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      'No se encontraron datos relacionados',
+                      style: TextStyle(color: DuvitAppTheme.lightText),
+                    ),
                   ],
                 ),
               ],
-            
             );
 
           }
