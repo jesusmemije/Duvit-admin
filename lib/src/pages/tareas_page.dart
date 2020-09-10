@@ -14,8 +14,8 @@ class TareasPage extends StatefulWidget {
 }
 
 class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
-  final staffsProvider = new StaffsProvider();
 
+  final staffsProvider = new StaffsProvider();
   final tareasProvider = new TareasProvider();
 
   ScrollController scrollController = ScrollController();
@@ -67,6 +67,15 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
             height: MediaQuery.of(context).padding.bottom,
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pop(context);
+          Navigator.pushNamed(context, 'agregar_tarea', arguments: staff);
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+        icon: Icon(Icons.add),
+        label: Text('Agregar tarea'),
       ),
     );
   }
@@ -352,4 +361,5 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
       ),
     );
   }
+
 }

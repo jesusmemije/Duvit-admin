@@ -98,7 +98,7 @@ class ContactoSearch extends SearchDelegate {
                         });
                       },
                       child: new Icon(
-                        Icons.notifications,
+                        Icons.add_alert,
                         size: 30.0,
                         color: DuvitAppTheme.grey,
                       )

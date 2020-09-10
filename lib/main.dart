@@ -1,6 +1,9 @@
 
 import 'dart:io';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'package:duvit_admin/src/pages/agregar_tarea_page.dart';
 import 'package:duvit_admin/src/pages/historial_tareas_page.dart';
 import 'package:duvit_admin/src/pages/llamadas_page.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +30,15 @@ class MyApp extends StatelessWidget {
     return Provider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('es', 'ES'),
+        ],
         title: 'Duvit Admin',
         initialRoute: 'home',
         routes: {
@@ -35,6 +47,7 @@ class MyApp extends StatelessWidget {
           'tareas'           : (BuildContext context) => TareasPage(),
           'historial_tareas' : (BuildContext context) => HistorialTareasPage(),
           'llamadas'         : (BuildContext context) => LlamadasPage(),
+          'agregar_tarea'    : (BuildContext context) => AgregarTareaPage(),
         },
         /*theme: ThemeData(
           primaryColor: Color.fromRGBO( 148, 40, 142, 1),
