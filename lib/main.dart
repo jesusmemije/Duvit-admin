@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           const Locale('es', 'ES'),
         ],
         title: 'Duvit Admin',
-        initialRoute: 'home',
+        initialRoute: 'login',
         routes: {
           'login'            : (BuildContext context) => LoginPage(),
           'home'             : (BuildContext context) => HomePage(),
@@ -49,10 +49,10 @@ class MyApp extends StatelessWidget {
           'llamadas'         : (BuildContext context) => LlamadasPage(),
           'agregar_tarea'    : (BuildContext context) => AgregarTareaPage(),
         },
-        /*theme: ThemeData(
+        theme: ThemeData(
           primaryColor: Color.fromRGBO( 148, 40, 142, 1),
           accentColor: Color.fromRGBO( 99, 0, 96, 1),
-        ),*/
+        ),
         
       ),
     );

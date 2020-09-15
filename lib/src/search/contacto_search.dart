@@ -76,7 +76,7 @@ class ContactoSearch extends SearchDelegate {
                   ),
                   title: Text(contacto.nombreCompleto),
                   subtitle: Text(
-                    contacto.tipo + " - " + "${ contacto.celular == '' ? contacto.telefonoCelular : contacto.celular }",
+                    contacto.tipo + " • " + "${ contacto.celular == '' ? contacto.telefonoCelular : contacto.celular }",
                   ),
                   trailing: Container(
                     width: 60.0,

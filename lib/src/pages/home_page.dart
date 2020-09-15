@@ -1,4 +1,3 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:duvit_admin/duvit_app_theme.dart';
 import 'package:duvit_admin/src/pages/asistencia_page.dart';
 import 'package:duvit_admin/src/pages/llamadas_page.dart';
@@ -26,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _crearBottomNavigationBar() {
+  /*Widget _crearBottomNavigationBar() {
 
     return BottomNavyBar (
       selectedIndex: currentIndex,
@@ -59,9 +58,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
-  }
+  }*/
 
-  /*Widget _crearBottomNavigationBar() {
+  Widget _crearBottomNavigationBar() {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (index) {
@@ -71,7 +70,7 @@ class _HomePageState extends State<HomePage> {
       },
       items: [
         BottomNavigationBarItem(
-            icon: Icon(Icons.supervised_user_circle), title: Text('Staff')
+            icon: Icon(Icons.supervised_user_circle), title: Text('Empleados')
         ),
         BottomNavigationBarItem(
             icon: Icon(Icons.call), title: Text('Llamadas')
@@ -81,7 +80,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
-  }*/
+  }
 
   Widget _callPage(int paginaActual) {
     switch (paginaActual) {

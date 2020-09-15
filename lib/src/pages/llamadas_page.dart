@@ -187,7 +187,7 @@ class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMix
                         children: <Widget>[
                       RichText(
                         text: TextSpan(
-                          text: llamadasPendientes.tipo + " - " + llamadasPendientes.celular,
+                          text: llamadasPendientes.tipo + " • " + llamadasPendientes.celular,
                           style: DuvitAppTheme.subtitle,
                         )
                       ),
