@@ -190,6 +190,7 @@ class FodPlaneacionModel {
         this.idProyecto       = 0,
         this.dias             = 0,
         this.horas            = 0,
+        this.minutos          = 0,
         this.fechaInicio      = "",
         this.statusPlaneacion = 0,
         this.fechaFin         = "",
@@ -206,6 +207,7 @@ class FodPlaneacionModel {
     int idProyecto;
     int dias;
     int horas;
+    int minutos;
     String fechaInicio;
     int statusPlaneacion;
     String fechaFin;
@@ -222,6 +224,7 @@ class FodPlaneacionModel {
         idProyecto       : json["idProyecto"],
         dias             : json["dias"],
         horas            : json["horas"],
+        minutos          : json["minutos"],
         fechaInicio      : json["fechaInicio"],
         statusPlaneacion : json["statusPlaneacion"],
         fechaFin         : json["fechaFin"],
@@ -239,6 +242,7 @@ class FodPlaneacionModel {
         "idProyecto"       : idProyecto,
         "dias"             : dias,
         "horas"            : horas,
+        "minutos"          : minutos,
         "fechaInicio"      : fechaInicio,
         "statusPlaneacion" : statusPlaneacion,
         "fechaFin"         : fechaFin,

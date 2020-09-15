@@ -367,7 +367,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
       children: <Widget>[
         Expanded(
           child: new Padding(
-            padding: const EdgeInsets.only(right: 5.0),
+            padding: const EdgeInsets.only(right: 4.0),
             child: TextFormField(
               initialValue: fodPlaneacion.dias.toString(),
               textCapitalization: TextCapitalization.sentences,
@@ -380,13 +380,9 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
               onSaved: (value) => fodPlaneacion.dias = int.parse(value),
               validator: ( value ) {
                 if ( utils.isNumeric(value) ){
-                  if ( int.parse(value) == 0 ) {
-                    return "Ingresa los días";
-                  } else {
                     return null;
-                  }
                 } else {
-                  return "Ingresar sólo números";
+                  return "Sólo números";
                 }
               },
             ),
@@ -394,7 +390,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
         ),
         Expanded(
           child: new Padding(
-            padding: const EdgeInsets.only(left: 5.0),
+            padding: const EdgeInsets.only(left: 4.0, right: 4.0),
             child: TextFormField(
               initialValue: fodPlaneacion.horas.toString(),
               textCapitalization: TextCapitalization.sentences,
@@ -408,13 +404,36 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
               onSaved: (value) => fodPlaneacion.horas = int.parse(value),
               validator: ( value ) {
                 if ( utils.isNumeric(value) ){
-                  if ( int.parse(value) == 0 ) {
-                    return "Ingresa las horas";
+                  return null;
+                } else {
+                  return "Sólo números";
+                }
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          child: new Padding(
+            padding: const EdgeInsets.only(left: 4.0),
+            child: TextFormField(
+              initialValue: fodPlaneacion.minutos.toString(),
+              textCapitalization: TextCapitalization.sentences,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Minutos',
+                isDense: true,
+              ),
+              onSaved: (value) => fodPlaneacion.minutos = int.parse(value),
+              validator: ( value ) {
+                if ( utils.isNumeric(value) ){
+                  if ( int.parse(value) > 60 ) {
+                    return "Menos de 60";
                   } else {
                     return null;
                   }
                 } else {
-                  return "Ingresar sólo números";
+                  return "Sólo números";
                 }
               },
             ),
