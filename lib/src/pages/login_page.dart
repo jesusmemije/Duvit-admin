@@ -135,7 +135,7 @@ class LoginPage extends StatelessWidget {
             end: Alignment.bottomLeft,
             colors: <Color>[
               Theme.of(context).primaryColor,
-              Theme.of(context).primaryColorDark
+              Theme.of(context).primaryColor
             ])
       ),
     );
