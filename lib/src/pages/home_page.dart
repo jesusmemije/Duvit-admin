@@ -75,7 +75,9 @@ class _HomePageState extends State<HomePage> {
         Icons.add,
         color: Theme.of(context).primaryColor,
       ),
-      onPressed: (){}
+      onPressed: (){
+        Navigator.pushNamed(context, 'agregar_tarea');
+      }
     );
 
   }

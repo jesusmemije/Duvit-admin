@@ -17,12 +17,9 @@ class TareasPage extends StatelessWidget {
     final StaffModel staff = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-      appBar: _crearAppBar( context, staff.nombre ),
-      body: Column(
-        children: [
-          _verMas( context, staff ),
-          _crearListado( context, staff.id ),
-        ],
+      appBar: _crearAppBar( context, staff ),
+      body: Container(
+        child: _crearListado(context, staff.id),
       ),
       floatingActionButton: _crearFloatingButton( context, staff )
     );
@@ -38,9 +35,12 @@ class TareasPage extends StatelessWidget {
 
         if (snapshot.hasData) {
           if ( tareas.isNotEmpty ) {
-            return ListView.builder(
-              itemCount: tareas.length,
-              itemBuilder: (context, i) => _crearItem( context, tareas[i]),
+            return Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: ListView.builder(
+                itemCount: tareas.length,
+                itemBuilder: (context, i) => _crearItem( context, tareas[i]),
+              ),
             );
           } else {
             return Row(
@@ -145,43 +145,49 @@ class TareasPage extends StatelessWidget {
     );
   }
 
-  Widget _crearAppBar( BuildContext context, String nombreStaff ) {
+  Widget _crearAppBar( BuildContext context, StaffModel staff ) {
 
     return PreferredSize(
       preferredSize: Size.fromHeight(60.0),
       child: AppBar(
+        centerTitle: true,
         title: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 30.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                Text(
-                  'Tareas',
-                  style: DuvitAppTheme.estiloTituloPagina
-                ),
-                Text(
-                  '• $nombreStaff',
-                  style: DuvitAppTheme.caption
-                ),
-              ],
-            )
-          ),
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Column (
+            children: [
+              Text( 'Tareas', style: DuvitAppTheme.estiloTituloPagina ),
+              Text( '• ${staff.nombre}', style: DuvitAppTheme.caption ),
+            ],
+          )
         ),
         elevation: 0.0,
         backgroundColor: Colors.white,
         actions: <Widget>[
           Padding(
-              padding: EdgeInsets.only(top: 8.0, right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
+            padding: EdgeInsets.only(top: 8.0),
+            child: IconButton(
+              color: Colors.red,
+                icon: Icon(
+                  Icons.history,
+                  color: DuvitAppTheme.darkerText,
+                ),
+                onPressed: (){
+                  Navigator.pushNamed(context, 'historial_tareas', arguments: staff);
                 },
-                child: Icon(
+            ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(top: 8.0, right: 4.0),
+            child: IconButton(
+                icon: Icon(
                   Icons.close,
                   color: DuvitAppTheme.darkerText,
                 ),
-            )
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+            ),
           ),
         ],
       ),
@@ -189,7 +195,7 @@ class TareasPage extends StatelessWidget {
 
   }
 
-  Widget _verMas( BuildContext context, StaffModel staff) {
+  /*Widget _verMas( BuildContext context, StaffModel staff) {
 
     return Container(
       child: Padding(
@@ -247,7 +253,7 @@ class TareasPage extends StatelessWidget {
         ),
       ),
     );
-  }
+  }*/
 
   Widget _crearFloatingButton( BuildContext context, StaffModel staff ) {
 

@@ -11,7 +11,7 @@ class ProyectosPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: _crearAppBar(),
+      appBar: _crearAppBar( context ),
       body: _crearLista(),
     );
   }
@@ -24,88 +24,89 @@ class ProyectosPage extends StatelessWidget {
 
         if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
 
-        return GroupedListView<dynamic, String>(
-          groupBy: (element) => element['nombreProyecto'],
-          elements: snapshot.data,
-          order: GroupedListOrder.DESC,
-          useStickyGroupSeparators: true,
-          //stickyHeaderBackgroundColor: Colors.deepPurple[100],
-          groupSeparatorBuilder: (String value) => Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              value,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20, 
-                fontWeight: FontWeight.bold
-              ),
-            ),
-          ),
-          itemBuilder: (context, element) {
-            return Card (
-              elevation: 8.0,
-              margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-              child: Container(
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  title: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          element['detalleTarea'],
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: DuvitAppTheme.title,
-                        ),
-                      ),
-                      SizedBox(height: 5.0),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "• " + element['nombreStaff'],
-                          overflow: TextOverflow.ellipsis,
-                          style: DuvitAppTheme.caption,
-                        ),
-                      ),
-                    ],
-                  )
+        return Padding(
+          padding: EdgeInsets.only(top: 8.0),
+          child: GroupedListView<dynamic, String>(
+            groupBy: (element) => element['nombreProyecto'],
+            elements: snapshot.data,
+            order: GroupedListOrder.DESC,
+            useStickyGroupSeparators: true,
+            //stickyHeaderBackgroundColor: Colors.deepPurple[100],
+            groupSeparatorBuilder: (String value) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                value,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20, 
+                  fontWeight: FontWeight.bold
                 ),
               ),
-            );
-          },
+            ),
+            itemBuilder: (context, element) {
+              return Card (
+                elevation: 8.0,
+                margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                child: Container(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                    title: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            element['detalleTarea'],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: DuvitAppTheme.title,
+                          ),
+                        ),
+                        SizedBox(height: 5.0),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "• " + element['nombreStaff'],
+                            overflow: TextOverflow.ellipsis,
+                            style: DuvitAppTheme.caption,
+                          ),
+                        ),
+                      ],
+                    )
+                  ),
+                ),
+              );
+            },
+          ),
         );
       },
     );
   }
 
-  Widget _crearAppBar() {
+  Widget _crearAppBar( BuildContext context ) {
 
     return PreferredSize(
       preferredSize: Size.fromHeight(60.0),
       child: AppBar(
+        centerTitle: true,
         title: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 30.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Proyectos',
-              style: DuvitAppTheme.estiloTituloPagina
-            ),
-          ),
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text( 'Proyectos', style: DuvitAppTheme.estiloTituloPagina ),
         ),
         elevation: 0.0,
         backgroundColor: Colors.white,
         actions: <Widget>[
           Padding(
-              padding: EdgeInsets.only(top: 8.0, right: 20.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(
+            padding: EdgeInsets.only(top: 8.0, right: 4.0),
+            child: IconButton(
+              color: Colors.red,
+                icon: Icon(
                   Icons.add,
                   color: DuvitAppTheme.darkerText,
                 ),
-            )
+                onPressed: (){
+                  Navigator.pushNamed(context, 'agregar_tarea');
+                },
+            ),
           ),
         ],
       ),

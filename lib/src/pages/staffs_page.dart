@@ -20,14 +20,16 @@ class StaffsPage extends StatelessWidget {
 
     return FutureBuilder(
       future: staffsProvider.cargarStaffs(),
-      builder:
-          (BuildContext context, AsyncSnapshot<List<StaffModel>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<StaffModel>> snapshot) {
 
         if (snapshot.hasData) {
           final staffs = snapshot.data;
-          return ListView.builder(
-            itemCount: staffs.length,
-            itemBuilder: (context, i) => _crearItem(context, staffs[i]),
+          return Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: ListView.builder(
+              itemCount: staffs.length,
+              itemBuilder: (context, i) => _crearItem(context, staffs[i]),
+            ),
           );
         } else {
           return Center(child: CircularProgressIndicator());
@@ -101,32 +103,28 @@ class StaffsPage extends StatelessWidget {
     return PreferredSize(
       preferredSize: Size.fromHeight(60.0),
       child: AppBar(
+        centerTitle: true,
         title: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 30.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text('Empleados', 
-            style: DuvitAppTheme.estiloTituloPagina
-            )
-          ),
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text('Empleados', style: DuvitAppTheme.estiloTituloPagina ),
         ),
         elevation: 0.0,
         backgroundColor: Colors.white,
         actions: <Widget>[
           Padding(
-              padding: EdgeInsets.only(top: 8.0, right: 20.0),
-              child: GestureDetector(
-                onTap: () {
+            padding: EdgeInsets.only(top: 8.0, right: 4.0),
+            child: IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: DuvitAppTheme.darkerText,
+                ),
+                onPressed: (){
                   showSearch(
                     context: context,
                     delegate: StaffSearch(),
                   );
                 },
-                child: Icon(
-                  Icons.search,
-                  color: DuvitAppTheme.darkerText,
-                ),
-            )
+            ),
           ),
         ],
       ),

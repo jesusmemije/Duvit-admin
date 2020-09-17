@@ -51,11 +51,16 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
   bool _mostrarDropStaff        = false;
   bool _mostrarDropProyecto     = false;
 
+  int _cltSetstate = 0;
+
   @override
   Widget build(BuildContext context) {
     
     //Rescatar instancia de model - arguments
     staff = ModalRoute.of(context).settings.arguments;
+
+    print("Contenido de Staff");
+    print(staff);
 
     if( staff != null ) {
       //Add idSataff for Model Form
@@ -64,10 +69,13 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
       _currentNombreStaff  = staff.nombre;
       _mostrarDropStaff    = false;
       _mostrarDropProyecto = true;
-    } else {
+    } else if( _cltSetstate == 0 ) {
       _mostrarDropStaff    = true;
       _mostrarDropProyecto = false;
     }
+
+    print("Valor para dropdow Proyecto");
+    print(_mostrarDropProyecto);
 
     return Scaffold(
       key: scaffoldKey,
@@ -82,22 +90,22 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
                   _titulo(),
                   _tituloNombre( _currentNombreStaff ),
                   SizedBox(height: 20.0),
-                  _mostrarDropStaff ? _dropDownStaff() : null,
-                  _mostrarDropStaff ? SizedBox(height: 10.0) : null,
-                  _mostrarDropProyecto ? _dropDownProyecto( _currentIdStaff ) : null,
-                  _mostrarDropProyecto ? SizedBox(height: 10.0) : null,
-                  _mostrarDropDowActividad ? _dropDownActividad( _currentIdProyecto ) : null,
-                  _mostrarDropDowActividad ? SizedBox(height: 10.0) : null,
-                  _mostrarDropDowTarea ? _dropDownTarea( _currentIdActividad ) : null,
-                  _mostrarDropDowTarea ? SizedBox(height: 10.0) : null,
+                  _mostrarDropStaff ? _dropDownStaff() : Container(),
+                  _mostrarDropStaff ? SizedBox(height: 10.0) : Container(),
+                  _mostrarDropProyecto ? _dropDownProyecto( _currentIdStaff ) : Container(),
+                  _mostrarDropProyecto ? SizedBox(height: 10.0) : Container(),
+                  _mostrarDropDowActividad ? _dropDownActividad( _currentIdProyecto ) : Container(),
+                  _mostrarDropDowActividad ? SizedBox(height: 10.0) : Container(),
+                  _mostrarDropDowTarea ? _dropDownTarea( _currentIdActividad ) : Container(),
+                  _mostrarDropDowTarea ? SizedBox(height: 10.0) : Container(),
                   _textDetalleTarea(),
                   SizedBox(height: 10.0),
                   _dropDownEstatus(),
                   SizedBox(height: 10.0),
                   _textRequerimientos(),
                   SizedBox(height: 10.0),
-                  _mostrarDropDependencia ? _dropDownDependencias() : null,
-                  _mostrarDropDependencia ? SizedBox(height: 10.0) : null,
+                  _mostrarDropDependencia ? _dropDownDependencias() : Container(),
+                  _mostrarDropDependencia ? SizedBox(height: 10.0) : Container(),
                   SizedBox(height: 10.0),
                   _textLabel('Tiempo estimado'),
                   SizedBox(height: 5.0),
@@ -148,7 +156,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
           color: DuvitAppTheme.deactivatedText,
         )
       )  ,
-    ) : null;
+    ) : Container();
   }
 
   Widget _dropDownStaff() {
@@ -171,9 +179,10 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
               value: staff.id,
             )).toList(),
             onChanged: (value) {
+
               setState(() {
                 _currentIdStaff      = value;
-                _currentNombreStaff  = staff.nombre;
+                _cltSetstate        = 1;
                 _mostrarDropProyecto = true;
               });
             },
@@ -194,6 +203,8 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
   }
 
   Widget _dropDownProyecto(String idStaff) {
+
+    print("Memije si entró al dropdowProyecto!!!!!!!");
 
     return FutureBuilder<List<ProyectoModel>>(
       future: agregarTareaProvider.buscarProyectosByStaff(idStaff),

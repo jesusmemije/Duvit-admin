@@ -33,27 +33,29 @@ class _LlamadasPageState extends State<LlamadasPage> {
 
         if (snapshot.hasData) {
           if ( llamadasPendientes.isNotEmpty ) {
-
-            return GroupedListView<dynamic, String>(
-              groupBy: (llamadaPendiente) {
-                return llamadaPendiente['fecha_group'];
-              },
-              elements: llamadasPendientes,
-              //order: GroupedListOrder.DESC,
-              useStickyGroupSeparators: true,
-              //stickyHeaderBackgroundColor: Colors.deepPurple[100],
-              groupSeparatorBuilder: (String value) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  value,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20, 
-                    fontWeight: FontWeight.bold
+            return Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: GroupedListView<dynamic, String>(
+                groupBy: (llamadaPendiente) {
+                  return llamadaPendiente['fecha_group'];
+                },
+                elements: llamadasPendientes,
+                //order: GroupedListOrder.DESC,
+                useStickyGroupSeparators: true,
+                //stickyHeaderBackgroundColor: Colors.deepPurple[100],
+                groupSeparatorBuilder: (String value) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    value,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20, 
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
                 ),
+                itemBuilder: (context, llamadaPendiente) => _crearItem(context, llamadaPendiente),
               ),
-              itemBuilder: (context, llamadaPendiente) => _crearItem(context, llamadaPendiente),
             );
 
           } else {
@@ -77,9 +79,7 @@ class _LlamadasPageState extends State<LlamadasPage> {
                 ),
               ],
             );
-
           }
-
         } else {
           return Center(child: CircularProgressIndicator());
         }
@@ -133,7 +133,7 @@ class _LlamadasPageState extends State<LlamadasPage> {
             }
 
             if ( direction == DismissDirection.endToStart ) {
-              final code = llamadasPendientesProvider.deleteLlamadaPendiente(llamadaPendiente['id']);
+              final code = llamadasPendientesProvider.deleteLlamadaPendiente(llamadaPendiente['id'].toString());
               code.then((value) {
                 
                 if( value ){
@@ -192,32 +192,29 @@ class _LlamadasPageState extends State<LlamadasPage> {
     return PreferredSize(
       preferredSize: Size.fromHeight(60.0),
       child: AppBar(
+        centerTitle: true,
         title: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 30.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text('Llamadas', 
-            style: DuvitAppTheme.estiloTituloPagina
-            )
-          ),
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text('Llamadas', style: DuvitAppTheme.estiloTituloPagina ),
         ),
         elevation: 0.0,
         backgroundColor: Colors.white,
         actions: <Widget>[
           Padding(
-              padding: EdgeInsets.only(top: 8.0, right: 20.0),
-              child: GestureDetector(
-                onTap: () {
+            padding: EdgeInsets.only(top: 8.0, right: 4.0),
+            child: IconButton(
+              color: Colors.red,
+                icon: Icon(
+                  Icons.search,
+                  color: DuvitAppTheme.darkerText,
+                ),
+                onPressed: (){
                   showSearch(
                     context: context,
                     delegate: ContactoSearch(),
                   );
                 },
-                child: Icon(
-                  Icons.search,
-                  color: DuvitAppTheme.darkerText,
-                ),
-            )
+            ),
           ),
         ],
       ),

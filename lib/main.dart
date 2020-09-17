@@ -1,4 +1,5 @@
 import 'package:duvit_admin/src/pages/proyectos_page.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:duvit_admin/src/pages/agregar_tarea_page.dart';
@@ -19,11 +20,17 @@ class MyApp extends StatelessWidget {
     /*SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Platform.isAndroid ? Brightness.dark : Brightness.light,
+      statusBarBrightness: Brightness.dark,
       systemNavigationBarColor: Colors.white,
       systemNavigationBarDividerColor: Colors.grey,
       systemNavigationBarIconBrightness: Brightness.dark,
     ));*/
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      //statusBarColor: Color.fromRGBO( 99, 0, 96, 1),
+      statusBarColor: Color.fromRGBO( 148, 40, 142, 1),
+      statusBarIconBrightness: Brightness.light,
+    ));
+
     return Provider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
