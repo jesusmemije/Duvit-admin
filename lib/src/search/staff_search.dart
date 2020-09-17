@@ -54,9 +54,7 @@ class StaffSearch extends SearchDelegate {
         final staffs = snapshot.data;
 
         if ( snapshot.hasData ){
-
           if ( staffs.isNotEmpty ) {
-
             return ListView(
               children: staffs.map( (staff) {
                 return ListTile(
@@ -76,9 +74,7 @@ class StaffSearch extends SearchDelegate {
                 );
               }).toList(),
             );
-
           } else {
-
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -99,18 +95,14 @@ class StaffSearch extends SearchDelegate {
                 ),
               ],
             );
-
           }
-          
         } else {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-
       },
     );
-
   }
 
 }

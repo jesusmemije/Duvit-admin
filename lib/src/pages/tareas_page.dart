@@ -6,51 +6,10 @@ import 'package:duvit_admin/src/providers/tareas_provider.dart';
 
 import 'package:flutter/material.dart';
 
-class TareasPage extends StatefulWidget {
-  static const Color transparent = Color(0x00000000);
-
-  @override
-  _TareasPageState createState() => _TareasPageState();
-}
-
-class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
+class TareasPage extends StatelessWidget {
 
   final staffsProvider = new StaffsProvider();
   final tareasProvider = new TareasProvider();
-
-  ScrollController scrollController = ScrollController();
-  double topBarOpacity = 0.0;
-  int topVermas = 72;
-
-  @override
-  void initState() {
-    scrollController.addListener(() {
-      if (scrollController.offset >= 24) {
-        if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-            topVermas = 0;
-          });
-        }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
-        if (topBarOpacity != scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = scrollController.offset / 24;
-            topVermas = 72;
-          });
-        }
-      } else if (scrollController.offset <= 0) {
-        if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-            topVermas = 0;
-          });
-        }
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,51 +17,31 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
     final StaffModel staff = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-      body: Stack(
+      appBar: _crearAppBar( context, staff.nombre ),
+      body: Column(
         children: [
-          _crearListado( staff ),
-          _verMas(context, 'Historial de tareas', 'Detalles', staff),
-          _getAppBarUI(),
-          SizedBox(
-            height: MediaQuery.of(context).padding.bottom,
-          ),
+          _verMas( context, staff ),
+          _crearListado( context, staff.id ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pop(context);
-          Navigator.pushNamed(context, 'agregar_tarea', arguments: staff);
-        },
-        backgroundColor: Theme.of(context).primaryColor,
-        icon: Icon(Icons.add),
-        label: Text('Agregar tarea'),
-      ),
+      floatingActionButton: _crearFloatingButton( context, staff )
     );
   }
 
-  Widget _crearListado( StaffModel staff ) {
+  Widget _crearListado( BuildContext context, String idstaff ) {
+
     return FutureBuilder(
-      future: tareasProvider.buscarTareasByIdStatus( staff.id, 1),
+      future: tareasProvider.buscarTareasByIdStatus( idstaff, 1),
       builder: (BuildContext context, AsyncSnapshot<List<TareaModel>> snapshot) {
 
         final tareas = snapshot.data;
 
         if (snapshot.hasData) {
-
           if ( tareas.isNotEmpty ) {
-
             return ListView.builder(
-              controller: scrollController,
-              padding: EdgeInsets.only(
-                top: AppBar().preferredSize.height +
-                    MediaQuery.of(context).padding.top +
-                    66,
-                bottom: 30 + MediaQuery.of(context).padding.bottom,
-              ),
               itemCount: tareas.length,
-              itemBuilder: (context, i) => _crearItem(context, tareas[i]),
+              itemBuilder: (context, i) => _crearItem( context, tareas[i]),
             );
-
           } else {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -132,15 +71,17 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _crearItem(BuildContext context, TareaModel tarea) {
+  Widget _crearItem( BuildContext context, TareaModel tarea ) {
+
     return Card(
       key: ValueKey(tarea.idPlaneacion),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5.0),
-                      bottomLeft: Radius.circular(5.0),
-                      bottomRight: Radius.circular(5.0),
-                      topRight: Radius.circular(32.0))
+          topLeft: Radius.circular(5.0),
+          bottomLeft: Radius.circular(5.0),
+          bottomRight: Radius.circular(5.0),
+          topRight: Radius.circular(32.0)
+        )
       ),
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
@@ -199,119 +140,65 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
               ),
             ],
           ),
-          /*trailing: Icon(
-            Icons.group,
-            color: Theme.of(context).primaryColor, 
-            size: 30.0
-          ),*/
-          /*onTap: () {
-            //Navigator.pushNamed(context, 'tareas');
-          },*/
         ),
       ),
     );
   }
 
-  Widget _getAppBarUI() {
-    return Column(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            color: DuvitAppTheme.white.withOpacity(topBarOpacity),
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(32.0),
-            ),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: DuvitAppTheme.grey.withOpacity(0.4 * topBarOpacity),
-                  offset: const Offset(1.1, 1.1),
-                  blurRadius: 10.0),
-            ],
-          ),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: MediaQuery.of(context).padding.top,
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: 16 - 8.0 * topBarOpacity,
-                    bottom: 12 - 8.0 * topBarOpacity),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Tareas',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontFamily: DuvitAppTheme.fontName,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 22 + 6 - 6 * topBarOpacity,
-                                letterSpacing: 1.2,
-                                color: DuvitAppTheme.darkerText,
-                              ),
-                            ),
-                            Text(
-                              ' pendientes',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontFamily: DuvitAppTheme.fontName,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 9 + 6 - 6 * topBarOpacity,
-                                letterSpacing: 1.2,
-                                color: DuvitAppTheme.lightText,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 38,
-                      width: 38,
-                      child: InkWell(
-                        highlightColor: Colors.transparent,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(32.0)),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Center(
-                          child: Icon(
-                            Icons.close,
-                            color: DuvitAppTheme.grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+  Widget _crearAppBar( BuildContext context, String nombreStaff ) {
+
+    return PreferredSize(
+      preferredSize: Size.fromHeight(60.0),
+      child: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 30.0),
+          child: Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  'Tareas',
+                  style: DuvitAppTheme.estiloTituloPagina
                 ),
-              )
-            ],
+                Text(
+                  '• $nombreStaff',
+                  style: DuvitAppTheme.caption
+                ),
+              ],
+            )
           ),
         ),
-      ],
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(top: 8.0, right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: DuvitAppTheme.darkerText,
+                ),
+            )
+          ),
+        ],
+      ),
     );
+
   }
 
-  Widget _verMas(BuildContext context, String titulo, String subtitulo, StaffModel staff) {
+  Widget _verMas( BuildContext context, StaffModel staff) {
+
     return Container(
-      padding:
-          EdgeInsets.only(top: MediaQuery.of(context).padding.top + topVermas),
       child: Padding(
         padding: const EdgeInsets.only(left: 24, right: 24),
         child: Row(
           children: <Widget>[
             Expanded(
               child: Text(
-                titulo,
+                "Historial de tareas",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: DuvitAppTheme.fontName,
@@ -333,7 +220,7 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      subtitulo,
+                      "Detalles",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontFamily: DuvitAppTheme.fontName,
@@ -360,6 +247,33 @@ class _TareasPageState extends State<TareasPage> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  Widget _crearFloatingButton( BuildContext context, StaffModel staff ) {
+
+    return FloatingActionButton.extended(
+      elevation: 8.0,
+      backgroundColor: DuvitAppTheme.white,
+      label: Text(
+        "Agregar tarea",
+        style: TextStyle(
+          fontFamily: DuvitAppTheme.fontName,
+          fontWeight: FontWeight.w700,
+          fontSize: 14,
+          letterSpacing: 0.0,
+          color: Theme.of(context).primaryColor,
+        )
+      ),
+      icon: Icon(
+        Icons.add,
+        color: Theme.of(context).primaryColor,
+      ),
+      onPressed: (){
+        Navigator.pop(context);
+        Navigator.pushNamed(context, 'agregar_tarea', arguments: staff);
+      }
+    );
+
   }
 
 }

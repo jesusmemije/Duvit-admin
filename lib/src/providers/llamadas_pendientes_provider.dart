@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 import 'package:duvit_admin/src/models/contacto_model.dart';
-import 'package:duvit_admin/src/models/llamada_pendiente_model.dart';
 import 'package:http/http.dart' as http;
 
 class LlamadasPendientesProvider {
@@ -24,24 +23,14 @@ class LlamadasPendientesProvider {
 
   }
 
-  Future<List<LlamadaPendienteModel>> mostrarLlamadasPendientesActivas() async {
+  Future<List> mostrarLlamadasPendientesActivas() async {
 
     final url = '$_url/llamadas-pendientes.php';
-    final resp = await http.get( url );
-  
-    final Map<String, dynamic> decodedData = json.decode(resp.body);
+    final response = await http.get( url );
+    
+    List listaLlamadasPendientesByGroup = json.decode(response.body);
 
-    final List<LlamadaPendienteModel> llamadasPendientes = new List();
-
-    decodedData.forEach((id, llamadaPendiente) {
-
-      final llamadaPendienteTemp = LlamadaPendienteModel.fromJson(llamadaPendiente);
-      llamadaPendienteTemp.id    = id;
-      llamadasPendientes.add( llamadaPendienteTemp );
-
-    });
-
-    return llamadasPendientes;
+    return listaLlamadasPendientesByGroup;
 
   }
 

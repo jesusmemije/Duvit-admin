@@ -2,6 +2,7 @@ import 'package:duvit_admin/duvit_app_theme.dart';
 import 'package:duvit_admin/src/models/agregar_tarea_model.dart';
 import 'package:duvit_admin/src/models/staff_model.dart';
 import 'package:duvit_admin/src/providers/agregar_tarea_provider.dart';
+import 'package:duvit_admin/src/providers/staffs_provider.dart';
 import 'package:duvit_admin/src/utils/utils.dart' as utils;
 import 'package:flutter/material.dart';
 
@@ -12,24 +13,27 @@ class AgregarTareaPage extends StatefulWidget {
 
 class _AgregarTareaPageState extends State<AgregarTareaPage> {
 
+  //Global Keys
   final formKey     = new GlobalKey<FormState>();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  //Para inputs de PickerDate
+  //Controllers for inputs datepicker
   String _fechaInicio = '';
-  TextEditingController _dateFechaInicioController =
-      new TextEditingController();
-  String _fechaFin = '';
-  TextEditingController _dateFechaFinController = new TextEditingController();
+  String _fechaFin    = '';
   String _fechaLimite = '';
-  TextEditingController _dateFechaLimiteController =
-      new TextEditingController();
-
+  TextEditingController _dateFechaInicioController = new TextEditingController();
+  TextEditingController _dateFechaFinController    = new TextEditingController();
+  TextEditingController _dateFechaLimiteController = new TextEditingController();
+  
+  //Provider
   final agregarTareaProvider = new AgregarTareaProvider();
+  final staffsProvider       = new StaffsProvider();
 
+  //Models
   FodPlaneacionModel fodPlaneacion = new FodPlaneacionModel();
-  StaffModel staff = new StaffModel();
+  StaffModel staff                 = new StaffModel();
 
+  //Variables de control
   bool _guardando = false;
 
   int _currentIdProyecto;
@@ -37,24 +41,33 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
   int _currentTarea;
   int _currentIdEstatus;
   int _currentDependencia;
+  String _currentIdStaff;
+  String _currentNombreStaff = "";
 
   bool _mostrarDropDowActividad = false;
   bool _mostrarDropDowTarea     = false;
   bool _mostrarDropDependencia  = false;
 
-  TextStyle estiloTexto = TextStyle(
-    fontWeight: FontWeight.w500,
-    fontSize: 14,
-    letterSpacing: 1.0,
-    color: DuvitAppTheme.darkerText,
-  );
+  bool _mostrarDropStaff        = false;
+  bool _mostrarDropProyecto     = false;
 
   @override
   Widget build(BuildContext context) {
     
+    //Rescatar instancia de model - arguments
     staff = ModalRoute.of(context).settings.arguments;
 
-    fodPlaneacion.idResponsable = int.parse(staff.id);
+    if( staff != null ) {
+      //Add idSataff for Model Form
+      fodPlaneacion.idResponsable = int.parse(staff.id);
+      _currentIdStaff      = staff.id;
+      _currentNombreStaff  = staff.nombre;
+      _mostrarDropStaff    = false;
+      _mostrarDropProyecto = true;
+    } else {
+      _mostrarDropStaff    = true;
+      _mostrarDropProyecto = false;
+    }
 
     return Scaffold(
       key: scaffoldKey,
@@ -67,22 +80,24 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
               child: Column(
                 children: [
                   _titulo(),
-                  _tituloNombre( staff ),
+                  _tituloNombre( _currentNombreStaff ),
                   SizedBox(height: 20.0),
-                  _dropDownProyecto( staff ),
-                  SizedBox(height: 10.0),
-                  _mostrarDropDowActividad ? _dropDownActividad( _currentIdProyecto ) : Container(),
-                  _mostrarDropDowActividad ? SizedBox(height: 10.0) : Container(),
-                  _mostrarDropDowTarea ? _dropDownTarea( _currentIdActividad ) : Container(),
-                  _mostrarDropDowTarea ? SizedBox(height: 10.0) : Container(),
+                  _mostrarDropStaff ? _dropDownStaff() : null,
+                  _mostrarDropStaff ? SizedBox(height: 10.0) : null,
+                  _mostrarDropProyecto ? _dropDownProyecto( _currentIdStaff ) : null,
+                  _mostrarDropProyecto ? SizedBox(height: 10.0) : null,
+                  _mostrarDropDowActividad ? _dropDownActividad( _currentIdProyecto ) : null,
+                  _mostrarDropDowActividad ? SizedBox(height: 10.0) : null,
+                  _mostrarDropDowTarea ? _dropDownTarea( _currentIdActividad ) : null,
+                  _mostrarDropDowTarea ? SizedBox(height: 10.0) : null,
                   _textDetalleTarea(),
                   SizedBox(height: 10.0),
                   _dropDownEstatus(),
                   SizedBox(height: 10.0),
                   _textRequerimientos(),
                   SizedBox(height: 10.0),
-                  _mostrarDropDependencia ? _dropDownDependencias() : Container(),
-                  _mostrarDropDependencia ? SizedBox(height: 10.0) : Container(),
+                  _mostrarDropDependencia ? _dropDownDependencias() : null,
+                  _mostrarDropDependencia ? SizedBox(height: 10.0) : null,
                   SizedBox(height: 10.0),
                   _textLabel('Tiempo estimado'),
                   SizedBox(height: 5.0),
@@ -94,7 +109,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
                   SizedBox(height: 10.0),
                   _datePickerFechaLimite(context),
                   SizedBox(height: 15.0),
-                  _rowBotones( staff ),             
+                  _rowBotones(),             
                 ],
               ),
             ),
@@ -104,7 +119,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
     );
   }
 
-  Widget _titulo(){
+  Widget _titulo() {
 
     return Align(
       alignment: Alignment.centerLeft,
@@ -120,11 +135,11 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
     );
   }
 
-  Widget _tituloNombre(StaffModel staff ){
+  Widget _tituloNombre(String nombreStaff ){
 
-    return Align(
+    return nombreStaff != "" ? Align (
       alignment: Alignment.centerLeft,
-      child: Text('•${staff.nombre}',
+      child: Text('•$nombreStaff',
         style: TextStyle(
           fontFamily: DuvitAppTheme.fontName,
           fontWeight: FontWeight.w500,
@@ -132,14 +147,56 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
           letterSpacing: 1.2,
           color: DuvitAppTheme.deactivatedText,
         )
-      ),
+      )  ,
+    ) : null;
+  }
+
+  Widget _dropDownStaff() {
+
+    return FutureBuilder<List<StaffModel>>(
+      future: staffsProvider.cargarStaffs(),
+      builder: (BuildContext context, AsyncSnapshot<List<StaffModel>> snapshot) {
+        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        return DropdownButtonFormField<String>(
+            onSaved: ( value ) => fodPlaneacion.idResponsable = int.parse(value),
+            validator: ( value ) {
+              if ( value == null ){
+                return "No ha seleccionado staff";
+              } else {
+                return null;
+              }
+            },
+            items: snapshot.data.map((staff) => DropdownMenuItem<String>(
+              child: Text(staff.nombre, style: DuvitAppTheme.estiloTextoInput, overflow: TextOverflow.ellipsis),
+              value: staff.id,
+            )).toList(),
+            onChanged: (value) {
+              setState(() {
+                _currentIdStaff      = value;
+                _currentNombreStaff  = staff.nombre;
+                _mostrarDropProyecto = true;
+              });
+            },
+            isExpanded: true,
+            value: _currentIdStaff != null ? _currentIdStaff : null,
+            icon: Icon(Icons.keyboard_arrow_down),
+            style: DuvitAppTheme.estiloTextoInput,
+            iconEnabledColor: Theme.of(context).primaryColor,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Selecciona un staff',
+              isDense: true,
+            ),
+            elevation: 24,
+        );
+      }
     );
   }
 
-  Widget _dropDownProyecto(StaffModel staff) {
+  Widget _dropDownProyecto(String idStaff) {
 
     return FutureBuilder<List<ProyectoModel>>(
-      future: agregarTareaProvider.buscarProyectosByStaff(staff.id),
+      future: agregarTareaProvider.buscarProyectosByStaff(idStaff),
       builder: (BuildContext context, AsyncSnapshot<List<ProyectoModel>> snapshot) {
         if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
         return DropdownButtonFormField<int>(
@@ -152,7 +209,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
               }
             },
             items: snapshot.data.map((proyecto) => DropdownMenuItem<int>(
-              child: Text(proyecto.nombreProyecto, style: estiloTexto, overflow: TextOverflow.ellipsis),
+              child: Text(proyecto.nombreProyecto, style: DuvitAppTheme.estiloTextoInput, overflow: TextOverflow.ellipsis),
               value: proyecto.id,
             )).toList(),
             onChanged: (value) {
@@ -165,7 +222,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
             isExpanded: true,
             value: _currentIdProyecto != null ? _currentIdProyecto : null,
             icon: Icon(Icons.keyboard_arrow_down),
-            style: estiloTexto,
+            style: DuvitAppTheme.estiloTextoInput,
             iconEnabledColor: Theme.of(context).primaryColor,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -186,7 +243,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
         if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
         return DropdownButtonFormField<int>(
             items: snapshot.data.map((actividad) => DropdownMenuItem<int>(
-              child: Text(actividad.nombreActividad, style: estiloTexto, overflow: TextOverflow.ellipsis),
+              child: Text(actividad.nombreActividad, style: DuvitAppTheme.estiloTextoInput, overflow: TextOverflow.ellipsis),
               value: actividad.id,
             )).toList(),
             onChanged: (value) {
@@ -198,7 +255,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
             isExpanded: true,
             value: _currentIdActividad != null ? _currentIdActividad : null,
             icon: Icon(Icons.keyboard_arrow_down),
-            style: estiloTexto,
+            style: DuvitAppTheme.estiloTextoInput,
             iconEnabledColor: Theme.of(context).primaryColor,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -221,13 +278,13 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
             onSaved: ( value ) => fodPlaneacion.idTarea = value,
             validator: ( value ) {
               if ( value == null ){
-                return "No la seleccionado la tarea";
+                return "No ha seleccionado la tarea";
               } else {
                 return null;
               }
             },
             items: snapshot.data.map((tarea) => DropdownMenuItem<int>(
-              child: Text(tarea.nombreTarea, style: estiloTexto, overflow: TextOverflow.ellipsis),
+              child: Text(tarea.nombreTarea, style: DuvitAppTheme.estiloTextoInput, overflow: TextOverflow.ellipsis),
               value: tarea.id,
             )).toList(),
             onChanged: (value) {
@@ -238,7 +295,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
             isExpanded: true,
             value: _currentTarea != null ? _currentTarea : null,
             icon: Icon(Icons.keyboard_arrow_down),
-            style: estiloTexto,
+            style: DuvitAppTheme.estiloTextoInput,
             iconEnabledColor: Theme.of(context).primaryColor,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -289,7 +346,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
               }
             },
             items: snapshot.data.map((estatus) => DropdownMenuItem<int>(
-              child: Text(estatus.estatusPlaneacion, style: estiloTexto, overflow: TextOverflow.ellipsis),
+              child: Text(estatus.estatusPlaneacion, style: DuvitAppTheme.estiloTextoInput, overflow: TextOverflow.ellipsis),
               value: estatus.id,
             )).toList(),
             onChanged: (value) {
@@ -300,7 +357,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
             isExpanded: true,
             value: _currentIdEstatus != null ? _currentIdEstatus : null,
             icon: Icon(Icons.keyboard_arrow_down),
-            style: estiloTexto,
+            style: DuvitAppTheme.estiloTextoInput,
             iconEnabledColor: Theme.of(context).primaryColor,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -336,7 +393,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
         return DropdownButtonFormField<int>(
             onSaved: ( value ) => fodPlaneacion.idDependencia = value,
             items: snapshot.data.map((dependencia) => DropdownMenuItem<int>(
-              child: Text(dependencia.detalleTarea, style: estiloTexto, overflow: TextOverflow.ellipsis),
+              child: Text(dependencia.detalleTarea, style: DuvitAppTheme.estiloTextoInput, overflow: TextOverflow.ellipsis),
               value: dependencia.idPlaneacion,
             )).toList(),
             onChanged: (value) {
@@ -347,7 +404,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
             isExpanded: true,
             value: _currentDependencia != null ? _currentDependencia : null,
             icon: Icon(Icons.keyboard_arrow_down),
-            style: estiloTexto,
+            style: DuvitAppTheme.estiloTextoInput,
             iconEnabledColor: Theme.of(context).primaryColor,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -611,14 +668,14 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Expanded(
-          child: Text(titulo, style: estiloTexto),
+          child: Text(titulo, style: DuvitAppTheme.estiloTextoInput),
         ),
       ],
     );
 
   }
 
-  Widget _rowBotones( StaffModel staff ){
+  Widget _rowBotones(){
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -630,8 +687,12 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
               icon: Icon(Icons.arrow_back),
               label:  Text('Regresar'),
               onPressed: (){
-                Navigator.pop(context);
-                Navigator.pushNamed(context, 'tareas', arguments: staff);
+                if ( staff != null ) {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'tareas', arguments: staff);
+                } else {
+                  Navigator.pop(context);
+                }
               } ,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
@@ -641,7 +702,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
             ),
           ),
         ),
-        Expanded(
+        Expanded (
           child: Padding(
             padding: const EdgeInsets.only(left: 5.0),
             child: RaisedButton.icon(
@@ -670,12 +731,36 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
     setState(() { _guardando = true; });
 
     final response = agregarTareaProvider.crearFODPlaneacion(fodPlaneacion);
-    response.then((value) => {
-      Navigator.pop(context),
-      Navigator.pushNamed(context, 'tareas', arguments: staff)
+
+    response.then((value){
+      if( value ){
+        mostrarSnackbar("La tarea se ha registrado con éxito");
+      } else {
+        mostrarSnackbar("Hemos tenido un problema al intentar registrar la tarea");
+      }
     });
 
-    setState(() { _guardando = false; });
+    Duration(milliseconds: 1500);
+
+    if ( staff != null ) {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, 'tareas', arguments: staff);
+    } else {
+      Navigator.pop(context);
+    }
+
+    //setState(() { _guardando = false; });
+  }
+
+  void mostrarSnackbar( String mensaje ) {
+
+    final snackbar = SnackBar(
+      content: Text( mensaje ),
+      duration: Duration( milliseconds: 1500 ),
+    );
+
+    scaffoldKey.currentState.showSnackBar(snackbar);
+
   }
 
 }

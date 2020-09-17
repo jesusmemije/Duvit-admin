@@ -35,8 +35,8 @@ dependencies:
   toast: ^0.1.5
   http:
   url_launcher: ^5.5.2
-  bottom_navy_bar: ^5.5.0
-  dropdown_formfield: ^0.1.2
+  grouped_list: ^3.4.0
+
 
 dev_dependencies:
   flutter_test:

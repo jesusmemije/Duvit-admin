@@ -6,47 +6,10 @@ import 'package:duvit_admin/src/providers/tareas_provider.dart';
 
 import 'package:flutter/material.dart';
 
-class HistorialTareasPage extends StatefulWidget {
-  static const Color transparent = Color(0x00000000);
+class HistorialTareasPage extends StatelessWidget {
 
-  @override
-  _HistorialTareasPageState createState() => _HistorialTareasPageState();
-}
-
-class _HistorialTareasPageState extends State<HistorialTareasPage> with TickerProviderStateMixin {
   final staffsProvider = new StaffsProvider();
-
   final tareasProvider = new TareasProvider();
-
-  ScrollController scrollController = ScrollController();
-  double topBarOpacity = 0.0;
-
-  @override
-  void initState() {
-    scrollController.addListener(() {
-      if (scrollController.offset >= 24) {
-        if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-          });
-        }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
-        if (topBarOpacity != scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = scrollController.offset / 24;
-          });
-        }
-      } else if (scrollController.offset <= 0) {
-        if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-          });
-        }
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +17,13 @@ class _HistorialTareasPageState extends State<HistorialTareasPage> with TickerPr
     final StaffModel staff = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          _crearListado( staff ),
-          _getAppBarUI(),
-          SizedBox(
-            height: MediaQuery.of(context).padding.bottom,
-          ),
-        ],
-      ),
+      appBar: _crearAppBar( context, staff.nombre ),
+      body:  _crearListado( staff ),
     );
   }
 
   Widget _crearListado( StaffModel staff ) {
+
     return FutureBuilder(
       future: tareasProvider.buscarTareasByIdStatus( staff.id, 3 ),
       builder: (BuildContext context, AsyncSnapshot<List<TareaModel>> snapshot) {
@@ -74,23 +31,12 @@ class _HistorialTareasPageState extends State<HistorialTareasPage> with TickerPr
         final tareas = snapshot.data;
 
         if (snapshot.hasData) {
-
           if ( tareas.isNotEmpty ) {
-
             return ListView.builder(
-              controller: scrollController,
-              padding: EdgeInsets.only(
-                top: AppBar().preferredSize.height +
-                    MediaQuery.of(context).padding.top +
-                    24,
-                bottom: 30 + MediaQuery.of(context).padding.bottom,
-              ),
               itemCount: tareas.length,
-              itemBuilder: (context, i) => _crearItem(context, tareas[i]),
+              itemBuilder: (context, i) => _crearItem( tareas[i] ),
             );
-
           } else {
-
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -110,11 +56,8 @@ class _HistorialTareasPageState extends State<HistorialTareasPage> with TickerPr
                   ],
                 ),
               ],
-            
             );
-
           }
-
         } else {
           return Center(child: CircularProgressIndicator());
         }
@@ -122,15 +65,17 @@ class _HistorialTareasPageState extends State<HistorialTareasPage> with TickerPr
     );
   }
 
-  Widget _crearItem(BuildContext context, TareaModel tarea) {
+  Widget _crearItem( TareaModel tarea ) {
+
     return Card(
       key: ValueKey(tarea.idPlaneacion),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5.0),
-                      bottomLeft: Radius.circular(5.0),
-                      bottomRight: Radius.circular(5.0),
-                      topRight: Radius.circular(32.0)),
+          topLeft: Radius.circular(5.0),
+          bottomLeft: Radius.circular(5.0),
+          bottomRight: Radius.circular(5.0),
+          topRight: Radius.circular(32.0)
+        ),
       ),
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
@@ -189,105 +134,53 @@ class _HistorialTareasPageState extends State<HistorialTareasPage> with TickerPr
               ),
             ],
           ),
-          /*trailing: Icon(
-            Icons.group,
-            color: Theme.of(context).primaryColor, 
-            size: 30.0
-          ),
-          onTap: () {
-            //Navigator.pushNamed(context, 'tareas');
-          },*/
         ),
       ),
     );
   }
 
-  Widget _getAppBarUI() {
-    return Column(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            color: DuvitAppTheme.white.withOpacity(topBarOpacity),
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(32.0),
-            ),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: DuvitAppTheme.grey.withOpacity(0.4 * topBarOpacity),
-                  offset: const Offset(1.1, 1.1),
-                  blurRadius: 10.0),
-            ],
-          ),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: MediaQuery.of(context).padding.top,
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: 16 - 8.0 * topBarOpacity,
-                    bottom: 12 - 8.0 * topBarOpacity),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Tareas',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontFamily: DuvitAppTheme.fontName,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 22 + 6 - 6 * topBarOpacity,
-                                letterSpacing: 1.2,
-                                color: DuvitAppTheme.darkerText,
-                              ),
-                            ),
-                            Text(
-                              ' historial',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontFamily: DuvitAppTheme.fontName,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 9 + 6 - 6 * topBarOpacity,
-                                letterSpacing: 1.2,
-                                color: DuvitAppTheme.lightText,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 38,
-                      width: 38,
-                      child: InkWell(
-                        highlightColor: Colors.transparent,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(32.0)),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Center(
-                          child: Icon(
-                            Icons.close,
-                            color: DuvitAppTheme.grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+  Widget _crearAppBar( BuildContext context, String nombreStaff ) {
+
+    return PreferredSize(
+      preferredSize: Size.fromHeight(60.0),
+      child: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 30.0),
+          child: Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  'Historial',
+                  style: DuvitAppTheme.estiloTituloPagina
                 ),
-              )
-            ],
+                Text(
+                  '• $nombreStaff',
+                  style: DuvitAppTheme.caption
+                ),
+              ],
+            )
           ),
         ),
-      ],
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(top: 8.0, right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: DuvitAppTheme.darkerText,
+                ),
+            )
+          ),
+        ],
+      ),
     );
+
   }
+
 }

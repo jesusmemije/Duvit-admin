@@ -1,8 +1,8 @@
 import 'package:duvit_admin/duvit_app_theme.dart';
-import 'package:duvit_admin/src/models/llamada_pendiente_model.dart';
 import 'package:duvit_admin/src/providers/llamadas_pendientes_provider.dart';
 import 'package:duvit_admin/src/search/contacto_search.dart';
 import 'package:flutter/material.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LlamadasPage extends StatefulWidget {
@@ -11,77 +11,52 @@ class LlamadasPage extends StatefulWidget {
   _LlamadasPageState createState() => _LlamadasPageState();
 }
 
-class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMixin {
+class _LlamadasPageState extends State<LlamadasPage> {
 
   final llamadasPendientesProvider = new LlamadasPendientesProvider();
 
-  ScrollController scrollController = ScrollController();
-  double topBarOpacity = 0.0;
-
-  @override
-  void initState() {
-    scrollController.addListener(() {
-      if (scrollController.offset >= 24) {
-        if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-          });
-        }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
-        if (topBarOpacity != scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = scrollController.offset / 24;
-          });
-        }
-      } else if (scrollController.offset <= 0) {
-        if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-          });
-        }
-      }
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _crearListado(),
-        _getAppBarUI(),
-        SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
-        ),
-      ],
+    return Scaffold (
+      appBar: _crearAppBar(),
+      body: _crearListado(),
     );
   }
 
   Widget _crearListado() {
+
     return FutureBuilder(
       future: llamadasPendientesProvider.mostrarLlamadasPendientesActivas(),
-      builder: (BuildContext context, AsyncSnapshot<List<LlamadaPendienteModel>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
 
         final llamadasPendientes = snapshot.data;
-        if (snapshot.hasData) {
 
+        if (snapshot.hasData) {
           if ( llamadasPendientes.isNotEmpty ) {
 
-            return ListView.builder(
-              controller: scrollController,
-              padding: EdgeInsets.only(
-                top: AppBar().preferredSize.height +
-                    MediaQuery.of(context).padding.top +
-                    24,
-                bottom: 30 + MediaQuery.of(context).padding.bottom,
+            return GroupedListView<dynamic, String>(
+              groupBy: (llamadaPendiente) {
+                return llamadaPendiente['fecha_group'];
+              },
+              elements: llamadasPendientes,
+              //order: GroupedListOrder.DESC,
+              useStickyGroupSeparators: true,
+              //stickyHeaderBackgroundColor: Colors.deepPurple[100],
+              groupSeparatorBuilder: (String value) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  value,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20, 
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
               ),
-              itemCount: llamadasPendientes.length,
-              itemBuilder: (context, i) => _crearItem(context, llamadasPendientes[i]),
+              itemBuilder: (context, llamadaPendiente) => _crearItem(context, llamadaPendiente),
             );
 
           } else {
-
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -112,9 +87,10 @@ class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMix
     );
   }
 
-  Widget _crearItem(BuildContext context, LlamadaPendienteModel llamadasPendientes) {
-    return Card(
-      key: ValueKey(llamadasPendientes.id),
+  Widget _crearItem(BuildContext context, dynamic llamadaPendiente) {
+
+    return Card (
+      key: ValueKey( llamadaPendiente['id'] ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
@@ -152,12 +128,12 @@ class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMix
               Scaffold.of(context).showSnackBar(SnackBar(
                 content: Text("Llamando..."),
               ));
-              launch("tel://${ llamadasPendientes.celular }");
+              launch("tel://${ llamadaPendiente['celular'] }");
               setState(() {});
             }
 
             if ( direction == DismissDirection.endToStart ) {
-              final code = llamadasPendientesProvider.deleteLlamadaPendiente(llamadasPendientes.id);
+              final code = llamadasPendientesProvider.deleteLlamadaPendiente(llamadaPendiente['id']);
               code.then((value) {
                 
                 if( value ){
@@ -176,7 +152,7 @@ class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMix
           child: ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             title: Text(
-              llamadasPendientes.nombre,
+              llamadaPendiente['nombre'],
               style: DuvitAppTheme.title,
             ),
             subtitle: Row(
@@ -187,13 +163,13 @@ class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMix
                         children: <Widget>[
                       RichText(
                         text: TextSpan(
-                          text: llamadasPendientes.tipo + " • " + llamadasPendientes.celular,
+                          text: llamadaPendiente['tipo'] + " • " + llamadaPendiente['celular'],
                           style: DuvitAppTheme.subtitle,
                         )
                       ),
                       RichText(
                         text: TextSpan(
-                          text: llamadasPendientes.fecha,
+                          text: llamadaPendiente['fecha'],
                           style: DuvitAppTheme.subtitle,
                         )
                       ),
@@ -204,87 +180,47 @@ class _LlamadasPageState extends State<LlamadasPage> with TickerProviderStateMix
             ),
             trailing:
                 Icon(Icons.call, color: Theme.of(context).primaryColor, size: 30.0),
-            onTap: () => launch("tel://${llamadasPendientes.celular}")
+            onTap: () => launch("tel://${llamadaPendiente['celular']}")
           ),
         ),
       ),
     );
   }
 
-  Widget _getAppBarUI() {
-    return Column(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            color: DuvitAppTheme.white.withOpacity(topBarOpacity),
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(32.0),
-            ),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: DuvitAppTheme.grey.withOpacity(0.4 * topBarOpacity),
-                  offset: const Offset(1.1, 1.1),
-                  blurRadius: 10.0),
-            ],
-          ),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: MediaQuery.of(context).padding.top,
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: 16 - 8.0 * topBarOpacity,
-                    bottom: 12 - 8.0 * topBarOpacity),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Llamadas',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontFamily: DuvitAppTheme.fontName,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 22 + 6 - 6 * topBarOpacity,
-                            letterSpacing: 1.2,
-                            color: DuvitAppTheme.darkerText,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 38,
-                      width: 38,
-                      child: InkWell(
-                        highlightColor: Colors.transparent,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(32.0)),
-                        onTap: () {
-                          showSearch(
-                            context: context,
-                            delegate: ContactoSearch(),
-                          );
-                        },
-                        child: Center(
-                          child: Icon(
-                            Icons.search,
-                            color: DuvitAppTheme.grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+  Widget _crearAppBar() {
+
+    return PreferredSize(
+      preferredSize: Size.fromHeight(60.0),
+      child: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 30.0),
+          child: Align(
+            alignment: Alignment.center,
+            child: Text('Llamadas', 
+            style: DuvitAppTheme.estiloTituloPagina
+            )
           ),
         ),
-      ],
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(top: 8.0, right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  showSearch(
+                    context: context,
+                    delegate: ContactoSearch(),
+                  );
+                },
+                child: Icon(
+                  Icons.search,
+                  color: DuvitAppTheme.darkerText,
+                ),
+            )
+          ),
+        ],
+      ),
     );
   }
 }

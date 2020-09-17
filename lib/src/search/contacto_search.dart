@@ -57,9 +57,7 @@ class ContactoSearch extends SearchDelegate {
         final contactos = snapshot.data;
 
         if ( snapshot.hasData ){
-
           if ( contactos.isNotEmpty ) {
-
             return ListView(
               children: contactos.map( (contacto) {
                 return ListTile(
@@ -84,7 +82,6 @@ class ContactoSearch extends SearchDelegate {
                       onPressed: (){
                         final code = llamadasPendientesProvider.crearLlamadaPendiente( contacto );
                         code.then((value) {
-
                           if( value ){
                             Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text("Agregado a la lista de llamadas pendientes"),
@@ -94,12 +91,11 @@ class ContactoSearch extends SearchDelegate {
                               content: Text("Hemos tenido un problema interno, intente nuevamente por favor."),
                             ));
                           }
-
                         });
                       },
                       child: new Icon(
                         Icons.add_alert,
-                        size: 30.0,
+                        size: 24.0,
                         color: DuvitAppTheme.grey,
                       )
                     ),
@@ -107,9 +103,7 @@ class ContactoSearch extends SearchDelegate {
                 );
               }).toList(),
             );
-
           } else {
-
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -130,18 +124,14 @@ class ContactoSearch extends SearchDelegate {
                 ),
               ],
             );
-
           }
-          
         } else {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-
       },
     );
-
   }
 
 }

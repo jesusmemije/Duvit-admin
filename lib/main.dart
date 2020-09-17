@@ -1,6 +1,4 @@
-
-import 'dart:io';
-
+import 'package:duvit_admin/src/pages/proyectos_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:duvit_admin/src/pages/agregar_tarea_page.dart';
@@ -12,21 +10,20 @@ import 'package:duvit_admin/src/bloc/provider.dart';
 import 'package:duvit_admin/src/pages/tareas_page.dart';
 import 'package:duvit_admin/src/pages/home_page.dart';
 import 'package:duvit_admin/src/pages/login_page.dart';
-import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    /*SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
       statusBarBrightness: Platform.isAndroid ? Brightness.dark : Brightness.light,
       systemNavigationBarColor: Colors.white,
       systemNavigationBarDividerColor: Colors.grey,
       systemNavigationBarIconBrightness: Brightness.dark,
-    ));
+    ));*/
     return Provider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -40,7 +37,7 @@ class MyApp extends StatelessWidget {
           const Locale('es', 'ES'),
         ],
         title: 'Duvit Admin',
-        initialRoute: 'login',
+        initialRoute: 'home',
         routes: {
           'login'            : (BuildContext context) => LoginPage(),
           'home'             : (BuildContext context) => HomePage(),
@@ -48,6 +45,7 @@ class MyApp extends StatelessWidget {
           'historial_tareas' : (BuildContext context) => HistorialTareasPage(),
           'llamadas'         : (BuildContext context) => LlamadasPage(),
           'agregar_tarea'    : (BuildContext context) => AgregarTareaPage(),
+          'proyectos'        : (BuildContext context) => ProyectosPage(),
         },
         theme: ThemeData(
           primaryColor: Color.fromRGBO( 148, 40, 142, 1),
