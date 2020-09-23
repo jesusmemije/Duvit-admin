@@ -1,6 +1,6 @@
-# duvit_admin
+# Duvit Admin
 
-A new Flutter project.
+Duvit Admin es una app hecha con el Framework de Flutter. Su principal objetivo es servirle de Adminitrador de contenido a la App de Duvit. 
 
 ## Getting Started
 
