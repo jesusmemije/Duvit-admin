@@ -9,9 +9,8 @@ class ProyectosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: _crearAppBar( context ),
+      appBar: _crearAppBar(context),
       body: _crearLista(),
     );
   }
@@ -37,52 +36,51 @@ class ProyectosPage extends StatelessWidget {
               child: Text(
                 value,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20, 
-                  fontWeight: FontWeight.bold
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            itemBuilder: (context, element) {
-              return Card (
-                elevation: 8.0,
-                margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-                child: Container(
-                  child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    title: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            element['detalleTarea'],
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: DuvitAppTheme.title,
-                          ),
-                        ),
-                        SizedBox(height: 5.0),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "• " + element['nombreStaff'],
-                            overflow: TextOverflow.ellipsis,
-                            style: DuvitAppTheme.caption,
-                          ),
-                        ),
-                      ],
-                    )
-                  ),
-                ),
-              );
-            },
+            itemBuilder: (context, proyecto) => _crearItem(context, proyecto),
           ),
         );
       },
     );
   }
 
-  Widget _crearAppBar( BuildContext context ) {
+  Widget _crearItem(BuildContext context, dynamic proyecto) {
+
+    return Card(
+      elevation: 8.0,
+      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+      child: Container(
+        child: ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            title: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    proyecto['detalleTarea'],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: DuvitAppTheme.title,
+                  ),
+                ),
+                SizedBox(height: 5.0),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "• " + proyecto['nombreStaff'],
+                    overflow: TextOverflow.ellipsis,
+                    style: DuvitAppTheme.caption,
+                  ),
+                ),
+              ],
+            )),
+      ),
+    );
+  }
+
+  Widget _crearAppBar(BuildContext context) {
 
     return PreferredSize(
       preferredSize: Size.fromHeight(60.0),
@@ -90,7 +88,7 @@ class ProyectosPage extends StatelessWidget {
         centerTitle: true,
         title: Padding(
           padding: const EdgeInsets.only(top: 8.0),
-          child: Text( 'Proyectos', style: DuvitAppTheme.estiloTituloPagina ),
+          child: Text('Proyectos', style: DuvitAppTheme.estiloTituloPagina),
         ),
         elevation: 0.0,
         backgroundColor: Colors.white,
@@ -99,13 +97,13 @@ class ProyectosPage extends StatelessWidget {
             padding: EdgeInsets.only(top: 8.0, right: 4.0),
             child: IconButton(
               color: Colors.red,
-                icon: Icon(
-                  Icons.add,
-                  color: DuvitAppTheme.darkerText,
-                ),
-                onPressed: (){
-                  Navigator.pushNamed(context, 'agregar_tarea');
-                },
+              icon: Icon(
+                Icons.add,
+                color: DuvitAppTheme.darkerText,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, 'agregar_tarea');
+              },
             ),
           ),
         ],

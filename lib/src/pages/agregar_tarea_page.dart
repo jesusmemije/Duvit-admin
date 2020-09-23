@@ -59,9 +59,6 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
     //Rescatar instancia de model - arguments
     staff = ModalRoute.of(context).settings.arguments;
 
-    print("Contenido de Staff");
-    print(staff);
-
     if( staff != null ) {
       //Add idSataff for Model Form
       fodPlaneacion.idResponsable = int.parse(staff.id);
@@ -73,9 +70,6 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
       _mostrarDropStaff    = true;
       _mostrarDropProyecto = false;
     }
-
-    print("Valor para dropdow Proyecto");
-    print(_mostrarDropProyecto);
 
     return Scaffold(
       key: scaffoldKey,
@@ -203,8 +197,6 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
   }
 
   Widget _dropDownProyecto(String idStaff) {
-
-    print("Memije si entró al dropdowProyecto!!!!!!!");
 
     return FutureBuilder<List<ProyectoModel>>(
       future: agregarTareaProvider.buscarProyectosByStaff(idStaff),

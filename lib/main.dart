@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           const Locale('es', 'ES'),
         ],
         title: 'Duvit Admin',
-        initialRoute: 'login',
+        initialRoute: 'home',
         routes: {
           'login'            : (BuildContext context) => LoginPage(),
           'home'             : (BuildContext context) => HomePage(),
