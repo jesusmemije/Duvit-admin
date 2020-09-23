@@ -1,85 +1,101 @@
+import 'package:duvit_admin/duvit_app_theme.dart';
 import 'package:duvit_admin/src/pages/asistencia_page.dart';
+import 'package:duvit_admin/src/pages/llamadas_page.dart';
+import 'package:duvit_admin/src/pages/proyectos_page.dart';
 import 'package:duvit_admin/src/pages/staffs_page.dart';
-import 'package:duvit_admin/src/search/search_delegate.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
+  
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Duvit Admin'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search), 
-            onPressed: (){
-              showSearch(
-                context: context, 
-                delegate: StaffSearch(),
-              );
-            }
-          )
-        ],
+    return Container(
+      color: DuvitAppTheme.background,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: _callPage(currentIndex),
+        bottomNavigationBar: _crearBottomNavigationBar(),
+        floatingActionButton: _crearFloatingButton(),
       ),
-      body: _callPage( currentIndex ),
-      bottomNavigationBar: _crearBottomNavigationBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _crearFloatingActionButton(),
     );
   }
 
   Widget _crearBottomNavigationBar() {
-    
     return BottomNavigationBar(
+      elevation: 8.0,
+      type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
-      onTap: ( index ){
+      onTap: (index) {
         setState(() {
           currentIndex = index;
         });
       },
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.supervised_user_circle),
-          title: Text('Staff')
+          icon: Icon(Icons.supervised_user_circle), title: Text('Empleados')
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.assignment_turned_in),
-          title: Text('Asistencia')
+          icon: Icon(Icons.call), title: Text('Llamadas')
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.work), title: Text('Proyectos')
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.assignment_turned_in), title: Text('Asistencia')
         ),
       ],
     );
-
   }
 
-  Widget _callPage( int paginaActual ) {
+  Widget _crearFloatingButton() {
 
-    switch( paginaActual ) {
-
-      case 0: return StaffsPage();
-      case 1: return AsistenciaPage();
-
-      default: return StaffsPage();
-
-    }
-
-  }
-
-  Widget _crearFloatingActionButton() {
-
-    return FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: (){},
-      backgroundColor: Theme.of(context).primaryColor,
+    return FloatingActionButton.extended(
+      elevation: 8.0,
+      backgroundColor: DuvitAppTheme.white,
+      label: Text(
+        "Agregar tarea",
+        style: TextStyle(
+          fontFamily: DuvitAppTheme.fontName,
+          fontWeight: FontWeight.w700,
+          fontSize: 14,
+          letterSpacing: 0.0,
+          color: Theme.of(context).primaryColor,
+        )
+      ),
+      icon: Icon(
+        Icons.add,
+        color: Theme.of(context).primaryColor,
+      ),
+      onPressed: (){
+        Navigator.pushNamed(context, 'agregar_tarea');
+      }
     );
 
   }
+
+  Widget _callPage(int paginaActual) {
+    switch (paginaActual) {
+      case 0:
+        return StaffsPage();
+      case 1:
+        return LlamadasPage();
+      case 2:
+        return ProyectosPage();
+      case 3:
+        return AsistenciaPage();
+
+      default:
+        return StaffsPage();
+    }
+  }
+
 }

@@ -1,12 +1,16 @@
+import 'package:duvit_admin/src/providers/login_provider.dart';
+import 'package:duvit_admin/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:duvit_admin/src/bloc/provider.dart';
-import 'package:toast/toast.dart';
 
 class LoginPage extends StatelessWidget {
+
+  final loginProvider = LoginProvider();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
+      body: Stack(
       children: <Widget>[
         _crearFondo(context),
         _loginForm(context),
@@ -45,9 +49,9 @@ class LoginPage extends StatelessWidget {
                 Text('Ingreso', style: TextStyle(fontSize: 20.0)),
                 SizedBox(height: 15.0),
                 _crearEmail(bloc),
-                SizedBox(height: 30.0),
+                SizedBox(height: 20.0),
                 _crearPassword(bloc),
-                SizedBox(height: 30.0),
+                SizedBox(height: 20.0),
                 _crearBoton(bloc)
               ],
             ),
@@ -68,9 +72,8 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-                icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
-                hintText: 'ejemplo@correo.com',
-                labelText: 'Correo electrónico',
+                icon: Icon(Icons.alternate_email, color: Theme.of(context).primaryColor),
+                labelText: 'Usuario',
                 counterText: snapshot.data,
                 errorText: snapshot.error),
             onChanged: bloc.changeEmail,
@@ -89,10 +92,10 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             obscureText: true,
             decoration: InputDecoration(
-                icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
+                icon: Icon(Icons.lock_outline, color: Theme.of(context).primaryColor),
                 labelText: 'Contraseña',
-                counterText: snapshot.data,
-                errorText: snapshot.error),
+                errorText: snapshot.error
+            ),
             onChanged: bloc.changePassword,
           ),
         );
@@ -116,17 +119,19 @@ class LoginPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0)),
             elevation: 0.0,
-            color: Colors.deepPurple,
+            color: Theme.of(context).primaryColor,
             textColor: Colors.white,
-            onPressed: snapshot.hasData ? () => _login(bloc, context) : null);
+            onPressed: snapshot.hasData ? () => _login(bloc, context) : null
+        );
       },
     );
   }
 
   Widget _crearFondo(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
 
-    final fondoModaro = Container(
+    final fondo = Container(
       height: size.height * 0.4,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -134,8 +139,8 @@ class LoginPage extends StatelessWidget {
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
             colors: <Color>[
-              Color.fromRGBO(8, 2, 249, 1.0),
-              Color.fromRGBO(239, 90, 38, 1.0)
+              Theme.of(context).primaryColor,
+              Theme.of(context).primaryColor
             ])
       ),
     );
@@ -150,7 +155,7 @@ class LoginPage extends StatelessWidget {
 
     return Stack(
       children: <Widget>[
-        fondoModaro,
+        fondo,
         Positioned(top: 90.0, left: 30.0, child: circulo),
         Positioned(top: -40.0, right: -30.0, child: circulo),
         Positioned(bottom: -50.0, right: -10.0, child: circulo),
@@ -171,16 +176,16 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context) {
-    print('================');
-    print('Email: ${bloc.email}');
-    print('Password: ${bloc.password}');
-    print('================');
+  _login(LoginBloc bloc, BuildContext context) async {
+    
+    Map info = await loginProvider.login(bloc.email, bloc.password);
 
-    if ( bloc.email == 'admin@duvitapp.com' && bloc.password == 'admin' ){
+    if ( info['ok'] ) {
+      //Navigator.of(context).pop();
       Navigator.pushReplacementNamed(context, 'home');
     } else {
-      Toast.show("¡Datos incorrectos!", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+      mostrarAlerta( context, "El usuario y contresaña son inválidos");
+      //Toast.show("¡El usuario y contresaña con inválidos!", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
     }
     
   }

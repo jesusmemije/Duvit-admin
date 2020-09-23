@@ -1,3 +1,4 @@
+import 'package:duvit_admin/duvit_app_theme.dart';
 import 'package:duvit_admin/src/models/staff_model.dart';
 import 'package:duvit_admin/src/providers/staffs_provider.dart';
 import 'package:flutter/material.dart';
@@ -53,9 +54,7 @@ class StaffSearch extends SearchDelegate {
         final staffs = snapshot.data;
 
         if ( snapshot.hasData ){
-
           if ( staffs.isNotEmpty ) {
-
             return ListView(
               children: staffs.map( (staff) {
                 return ListTile(
@@ -67,43 +66,43 @@ class StaffSearch extends SearchDelegate {
                     fit: BoxFit.contain,
                   ),
                   title: Text(staff.nombre),
-                  subtitle: Text(staff.correo),
+                  subtitle: Text(staff.correoCorporativo),
                   onTap: (){
                     close(context, null);
-                    Navigator.pushNamed(context, 'detalles', arguments: staff);
+                    Navigator.pushNamed(context, 'tareas', arguments: staff);
                   },
                 );
               }).toList(),
             );
-
           } else {
-
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.cloud_off),
-                    Text('No se encontraron datos relacionados'),
+                    Icon(
+                      Icons.cloud_off,
+                      color: DuvitAppTheme.lightText,
+                      size: 40.0,
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      'No se encontraron datos relacionados',
+                      style: TextStyle(color: DuvitAppTheme.lightText),
+                    ),
                   ],
                 ),
               ],
-            
             );
-
           }
-
-          
         } else {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-
       },
     );
-
   }
 
 }
