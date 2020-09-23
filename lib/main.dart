@@ -1,4 +1,5 @@
 import 'package:duvit_admin/src/pages/proyectos_page.dart';
+import 'package:duvit_admin/src/preferencias_usuario/preferencias_usuarios.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -12,11 +13,25 @@ import 'package:duvit_admin/src/pages/tareas_page.dart';
 import 'package:duvit_admin/src/pages/home_page.dart';
 import 'package:duvit_admin/src/pages/login_page.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = new PreferenciasUsuario();
+  await prefs.initPrefs();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final prefs = new PreferenciasUsuario();
+    var logeado = prefs.logeado;
+
+    print('Logeado');
+    print( logeado );
+    
     /*SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
@@ -44,7 +59,7 @@ class MyApp extends StatelessWidget {
           const Locale('es', 'ES'),
         ],
         title: 'Duvit Admin',
-        initialRoute: 'home',
+        initialRoute: logeado == null || logeado == false ? 'login' : 'home',
         routes: {
           'login'            : (BuildContext context) => LoginPage(),
           'home'             : (BuildContext context) => HomePage(),

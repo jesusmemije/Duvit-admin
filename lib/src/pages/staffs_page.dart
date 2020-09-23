@@ -1,5 +1,6 @@
 import 'package:duvit_admin/duvit_app_theme.dart';
 import 'package:duvit_admin/src/models/staff_model.dart';
+import 'package:duvit_admin/src/preferencias_usuario/preferencias_usuarios.dart';
 import 'package:duvit_admin/src/providers/staffs_provider.dart';
 import 'package:duvit_admin/src/search/staff_search.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 class StaffsPage extends StatelessWidget {
 
   final staffsProvider = new StaffsProvider();
+  final prefs          = new PreferenciasUsuario();
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +114,7 @@ class StaffsPage extends StatelessWidget {
         backgroundColor: Colors.white,
         actions: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 8.0, right: 4.0),
+            padding: EdgeInsets.only(top: 8.0),
             child: IconButton(
                 icon: Icon(
                   Icons.search,
@@ -123,6 +125,20 @@ class StaffsPage extends StatelessWidget {
                     context: context,
                     delegate: StaffSearch(),
                   );
+                },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: IconButton(
+                icon: Icon(
+                  Icons.exit_to_app,
+                  color: DuvitAppTheme.darkerText,
+                ),
+                onPressed: (){
+                  prefs.clear();
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(context, 'login');
                 },
             ),
           ),

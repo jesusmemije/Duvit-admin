@@ -36,7 +36,8 @@ dependencies:
   http:
   url_launcher: ^5.5.2
   grouped_list: ^3.4.0
-
+  shared_preferences:
+  rich_alert:
 
 dev_dependencies:
   flutter_test:

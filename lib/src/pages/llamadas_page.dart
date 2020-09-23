@@ -6,18 +6,16 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LlamadasPage extends StatefulWidget {
-
   @override
   _LlamadasPageState createState() => _LlamadasPageState();
 }
 
 class _LlamadasPageState extends State<LlamadasPage> {
-
   final llamadasPendientesProvider = new LlamadasPendientesProvider();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold (
+    return Scaffold(
       appBar: _crearAppBar(),
       body: _crearListado(),
     );
@@ -28,11 +26,10 @@ class _LlamadasPageState extends State<LlamadasPage> {
     return FutureBuilder(
       future: llamadasPendientesProvider.mostrarLlamadasPendientesActivas(),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-
         final llamadasPendientes = snapshot.data;
 
         if (snapshot.hasData) {
-          if ( llamadasPendientes.isNotEmpty ) {
+          if (llamadasPendientes.isNotEmpty) {
             return Padding(
               padding: EdgeInsets.only(top: 8.0),
               child: GroupedListView<dynamic, String>(
@@ -48,16 +45,13 @@ class _LlamadasPageState extends State<LlamadasPage> {
                   child: Text(
                     value,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20, 
-                      fontWeight: FontWeight.bold
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                itemBuilder: (context, llamadaPendiente) => _crearItem(context, llamadaPendiente),
+                itemBuilder: (context, llamadaPendiente) =>
+                    _crearItem(context, llamadaPendiente),
               ),
             );
-
           } else {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -89,98 +83,97 @@ class _LlamadasPageState extends State<LlamadasPage> {
 
   Widget _crearItem(BuildContext context, dynamic llamadaPendiente) {
 
-    return Card (
-      key: ValueKey( llamadaPendiente['id'] ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      elevation: 8.0,
-      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-      child: Container(
-        child: Dismissible(
-          key: UniqueKey(),
-          background: Container(
-            color: Colors.green,
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Row(
-                children: [
-                  Icon(Icons.call, color: Colors.white),
-                  Text(' Llamar', style: TextStyle(color: Colors.white)),
-                ],
-              ),
-            ),
-          ),
-          secondaryBackground: Container(
-            color: Colors.red,
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(Icons.delete, color: Colors.white),
-                  Text('Eliminar', style: TextStyle(color: Colors.white))
-                ],
-              ),
-            ),
-          ),
-          onDismissed: ( direction ) {
-
-            if ( direction == DismissDirection.startToEnd ) {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text("Llamando..."),
-              ));
-              launch("tel://${ llamadaPendiente['celular'] }");
-              setState(() {});
-            }
-
-            if ( direction == DismissDirection.endToStart ) {
-              final code = llamadasPendientesProvider.deleteLlamadaPendiente(llamadaPendiente['id'].toString());
-              code.then((value) {
-                
-                if( value ){
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text("Llamada pendiente eliminada correctamente"),
-                  ));
-                } else {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text("Hemos tenido un problema interno, no eliminado."),
-                  ));
-                }
-              });
-            }
-
-          },
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            title: Text(
-              llamadaPendiente['nombre'],
-              style: DuvitAppTheme.title,
-            ),
-            subtitle: Row(
-              children: <Widget>[
-                new Flexible(
-                    child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                          text: llamadaPendiente['tipo'] + " • " + llamadaPendiente['celular'],
-                          style: DuvitAppTheme.subtitle,
-                        )
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: llamadaPendiente['fecha'],
-                          style: DuvitAppTheme.subtitle,
-                        )
-                      ),
-                    ]
-                  )
-                )
+    return Container(
+      child: Dismissible(
+        key: ValueKey(llamadaPendiente['id']),
+        background: Container(
+          color: Colors.green,
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Row(
+              children: [
+                Icon(Icons.call, color: Colors.white),
+                Text(' Llamar', style: TextStyle(color: Colors.white)),
               ],
             ),
-            trailing:
-                Icon(Icons.call, color: Theme.of(context).primaryColor, size: 30.0),
-            onTap: () => launch("tel://${llamadaPendiente['celular']}")
+          ),
+        ),
+        secondaryBackground: Container(
+          color: Colors.red,
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(Icons.delete, color: Colors.white),
+                Text('Eliminar', style: TextStyle(color: Colors.white))
+              ],
+            ),
+          ),
+        ),
+        onDismissed: (direction) {
+          if (direction == DismissDirection.startToEnd) {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text("Llamando..."),
+            ));
+            launch("tel://${llamadaPendiente['celular']}");
+            setState(() {});
+          }
+
+          if (direction == DismissDirection.endToStart) {
+            final code = llamadasPendientesProvider
+                .deleteLlamadaPendiente(llamadaPendiente['id'].toString());
+            code.then((value) {
+              if (value) {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Llamada pendiente eliminada correctamente"),
+                ));
+              } else {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content:
+                      Text("Hemos tenido un problema interno, no eliminado."),
+                ));
+              }
+            });
+          }
+        },
+        child: Card(
+          key: ValueKey(llamadaPendiente['id']),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          elevation: 8.0,
+          margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+          child: Container(
+            child: ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                title: Text(
+                  llamadaPendiente['nombre'],
+                  style: DuvitAppTheme.title,
+                ),
+                subtitle: Row(
+                  children: <Widget>[
+                    new Flexible(
+                        child: new Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                          RichText(
+                              text: TextSpan(
+                            text: llamadaPendiente['tipo'] +
+                                " • " +
+                                llamadaPendiente['celular'],
+                            style: DuvitAppTheme.subtitle,
+                          )),
+                          RichText(
+                              text: TextSpan(
+                            text: llamadaPendiente['fecha'],
+                            style: DuvitAppTheme.subtitle,
+                          )),
+                        ]))
+                  ],
+                ),
+                trailing: Icon(Icons.call,
+                    color: Theme.of(context).primaryColor, size: 30.0),
+                onTap: () => launch("tel://${llamadaPendiente['celular']}")),
           ),
         ),
       ),
@@ -195,7 +188,7 @@ class _LlamadasPageState extends State<LlamadasPage> {
         centerTitle: true,
         title: Padding(
           padding: const EdgeInsets.only(top: 8.0),
-          child: Text('Llamadas', style: DuvitAppTheme.estiloTituloPagina ),
+          child: Text('Llamadas', style: DuvitAppTheme.estiloTituloPagina),
         ),
         elevation: 0.0,
         backgroundColor: Colors.white,
@@ -204,16 +197,16 @@ class _LlamadasPageState extends State<LlamadasPage> {
             padding: EdgeInsets.only(top: 8.0, right: 4.0),
             child: IconButton(
               color: Colors.red,
-                icon: Icon(
-                  Icons.search,
-                  color: DuvitAppTheme.darkerText,
-                ),
-                onPressed: (){
-                  showSearch(
-                    context: context,
-                    delegate: ContactoSearch(),
-                  );
-                },
+              icon: Icon(
+                Icons.search,
+                color: DuvitAppTheme.darkerText,
+              ),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: ContactoSearch(),
+                );
+              },
             ),
           ),
         ],
