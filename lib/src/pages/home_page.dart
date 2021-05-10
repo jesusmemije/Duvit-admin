@@ -41,16 +41,16 @@ class _HomePageState extends State<HomePage> {
       },
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.supervised_user_circle), title: Text('Empleados')
+          icon: Icon(Icons.supervised_user_circle), label: 'Empleados'
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.call), title: Text('Llamadas')
+          icon: Icon(Icons.call), label: 'Llamadas'
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.work), title: Text('Proyectos')
+          icon: Icon(Icons.work), label: 'Proyectos'
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.assignment_turned_in), title: Text('Asistencia')
+          icon: Icon(Icons.assignment_turned_in), label: 'Asistencia'
         ),
       ],
     );
