@@ -2,15 +2,19 @@
 import 'dart:convert';
 
 import 'package:duvit_admin/src/models/contacto_model.dart';
+import 'package:duvit_admin/src/preferencias_usuario/preferencias_usuarios.dart';
 import 'package:http/http.dart' as http;
 
 class LlamadasPendientesProvider {
 
   final String _url = "http://www.duvitapp.com/WebService/v1";
+  final _prefs      = new PreferenciasUsuario();
 
   Future<bool> crearLlamadaPendiente( ContactoModel contacto ) async {
     
-    final url  = '$_url/llamadas-pendientes.php';
+    String idStaff = _prefs.idStaff;
+    
+    final url  = '$_url/llamadas-pendientes.php?type=insert&idStaff=$idStaff';
     final resp = await http.post(url, body: contactoModelToJson( contacto ) );
 
     final decodedData = json.decode(resp.body);
@@ -25,7 +29,9 @@ class LlamadasPendientesProvider {
 
   Future<List> mostrarLlamadasPendientesActivas() async {
 
-    final url = '$_url/llamadas-pendientes.php';
+    String idStaff = _prefs.idStaff;
+    
+    final url  = '$_url/llamadas-pendientes.php?type=show&idStaff=$idStaff';
     final response = await http.get( url );
     
     List listaLlamadasPendientesByGroup = json.decode(response.body);
@@ -36,7 +42,9 @@ class LlamadasPendientesProvider {
 
   Future<bool> deleteLlamadaPendiente( String id ) async {
 
-    final url = '$_url/llamadas-pendientes.php?iddelete=$id';
+    String idStaff = _prefs.idStaff;
+    
+    final url  = '$_url/llamadas-pendientes.php?type=delete&idStaff=$idStaff&iddelete=$id';
     final resp = await http.get( url );
 
     final Map<String, dynamic> decodedData = json.decode(resp.body);
