@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 ProyectoListModel proyectoListModelFromJson(String str) => ProyectoListModel.fromJson(json.decode(str));
-
 String proyectoListModelToJson(ProyectoListModel data) => json.encode(data.toJson());
 
 class ProyectoListModel {
@@ -30,5 +29,29 @@ class ProyectoListModel {
         "nombreProyecto" : nombreProyecto,
         "detalleTarea"   : detalleTarea,
         "nombreStaff"    : nombreStaff,
+    };
+}
+
+ProyectoToStaffModel proyectoToStaffModelFromJson(String str) => ProyectoToStaffModel.fromJson(json.decode(str));
+String proyectoToStaffModelToJson(ProyectoToStaffModel data) => json.encode(data.toJson());
+
+class ProyectoToStaffModel {
+
+    ProyectoToStaffModel({
+      this.idStaff    = 0,
+      this.idProyecto = 0,
+    });
+
+    int idStaff;
+    int idProyecto;
+
+    factory ProyectoToStaffModel.fromJson(Map<String, dynamic> json) => ProyectoToStaffModel(
+      idStaff    : json["idStaff"],
+      idProyecto : json["idProyecto"]
+    );
+
+    Map<String, dynamic> toJson() => {
+      "idStaff"    : idStaff,
+      "idProyecto" : idProyecto,
     };
 }

@@ -1,3 +1,4 @@
+import 'package:duvit_admin/src/pages/proyecto_to_staff_page.dart';
 import 'package:duvit_admin/src/pages/proyectos_page.dart';
 import 'package:duvit_admin/src/preferencias_usuario/preferencias_usuarios.dart';
 import 'package:flutter/services.dart';
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
           'llamadas'         : (BuildContext context) => LlamadasPage(),
           'agregar_tarea'    : (BuildContext context) => AgregarTareaPage(),
           'proyectos'        : (BuildContext context) => ProyectosPage(),
+          'proyecto_to_staff': (BuildContext context) => ProyectoToStaffPage(),
         },
         theme: ThemeData(
           primaryColor: Color.fromRGBO( 148, 40, 142, 1),
