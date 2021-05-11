@@ -28,7 +28,7 @@ class ProyectosPage extends StatelessWidget {
           child: GroupedListView<dynamic, String>(
             groupBy: (element) => element['nombreProyecto'],
             elements: snapshot.data,
-            order: GroupedListOrder.DESC,
+            order: GroupedListOrder.ASC,
             useStickyGroupSeparators: true,
             //stickyHeaderBackgroundColor: Colors.deepPurple[100],
             groupSeparatorBuilder: (String value) => Padding(
