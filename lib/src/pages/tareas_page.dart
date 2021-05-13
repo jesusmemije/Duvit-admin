@@ -96,7 +96,7 @@ class TareasPage extends StatelessWidget {
             children: <Widget>[
               Container(
                 margin: const EdgeInsets.only(right: 10.0),
-                height: 60,
+                height: 100,
                 width: 4,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor.withOpacity(0.5),
@@ -130,6 +130,42 @@ class TareasPage extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                           text: 'Proyecto: ${tarea.proyecto}',
+                          style: DuvitAppTheme.caption,
+                        ),
+                        maxLines: 3,
+                        softWrap: true,
+                      ),
+                      SizedBox(height: 2.0),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Estatus Planeación: ${tarea.statusPlaneacion}',
+                          style: DuvitAppTheme.caption,
+                        ),
+                        maxLines: 3,
+                        softWrap: true,
+                      ),
+                      SizedBox(height: 6.0),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Inicio: ${tarea.fechaInicio}',
+                          style: DuvitAppTheme.caption,
+                        ),
+                        maxLines: 3,
+                        softWrap: true,
+                      ),
+                      SizedBox(height: 2.0),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Fin: ${tarea.fechaFin}',
+                          style: DuvitAppTheme.caption,
+                        ),
+                        maxLines: 3,
+                        softWrap: true,
+                      ),
+                      SizedBox(height: 2.0),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Límite: ${tarea.fechaLimite}',
                           style: DuvitAppTheme.caption,
                         ),
                         maxLines: 3,

@@ -18,9 +18,9 @@ class ProyectosProvider {
 
   }
 
-  Future<List<ProyectoModel>> buscarProyectosByStaffSinRelacion( String idStaff ) async {
+  Future<List<ProyectoModel>> buscarProyectosByStaffSinRelacion( String idstaff ) async {
 
-    final url = '$_url/proyectos.php?type=search_projects&idStaff=$idStaff';
+    final url = '$_url/proyectos.php?type=search_projects&idstaff=$idstaff';
     var response = await http.get(url);
 
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
@@ -38,8 +38,6 @@ class ProyectosProvider {
 
     final response = await http.post(url, body: proyectoToStaffModelToJson( proyectoToStaff ) );
     final decodedData = json.decode(response.body);
-
-    print(decodedData);
 
     if ( decodedData['code'] == "201" ) {
       return true;

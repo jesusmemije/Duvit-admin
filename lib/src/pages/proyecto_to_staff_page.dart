@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:duvit_admin/duvit_app_theme.dart';
 import 'package:duvit_admin/src/models/agregar_tarea_model.dart';
 import 'package:duvit_admin/src/models/staff_model.dart';
@@ -169,7 +171,6 @@ class _ProyectoToStaffPageState extends State<ProyectoToStaffPage> {
               label:  Text('Regresar'),
               onPressed: (){
                 Navigator.pop(context);
-                Navigator.pushNamed(context, 'proyectos');
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
@@ -217,22 +218,21 @@ class _ProyectoToStaffPageState extends State<ProyectoToStaffPage> {
       }
     });
 
-    Duration(milliseconds: 1500);
+    new Timer(const Duration(milliseconds: 5000), () => 
+      Navigator.pop(context)
+    );
 
-    Navigator.pop(context);
-    Navigator.pushNamed(context, 'proyectos');
-
-    //setState(() { _guardando = false; });
+    /*setState(() { _guardando = false; });*/
   }
 
   void mostrarSnackbar( String mensaje ) {
 
-    final snackbar = SnackBar(
-      content: Text( mensaje ),
-      duration: Duration( milliseconds: 1500 ),
-    );
-
-    scaffoldKey.currentState.showSnackBar(snackbar);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text( mensaje ),
+          duration: Duration( milliseconds: 3500 ),
+        ),
+      );
 
   }
 

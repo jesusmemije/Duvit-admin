@@ -113,9 +113,13 @@ class _LlamadasPageState extends State<LlamadasPage> {
         ),
         onDismissed: (direction) {
           if (direction == DismissDirection.startToEnd) {
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text("Llamando..."),
-            ));
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Llamando..."),
+              ),
+            );
+            
             launch("tel://${llamadaPendiente['celular']}");
             setState(() {});
           }
@@ -125,14 +129,17 @@ class _LlamadasPageState extends State<LlamadasPage> {
                 .deleteLlamadaPendiente(llamadaPendiente['id'].toString());
             code.then((value) {
               if (value) {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text("Llamada pendiente eliminada correctamente"),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Llamada pendiente eliminada correctamente"),
+                  ),
+                );
               } else {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content:
-                      Text("Hemos tenido un problema interno, no eliminado."),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Hemos tenido un problema interno, no eliminado."),
+                  ),
+                );
               }
             });
           }

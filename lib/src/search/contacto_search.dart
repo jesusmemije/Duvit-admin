@@ -83,13 +83,17 @@ class ContactoSearch extends SearchDelegate {
                         final code = llamadasPendientesProvider.crearLlamadaPendiente( contacto );
                         code.then((value) {
                           if( value ){
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                              content: Text("Agregado a la lista de llamadas pendientes"),
-                            ));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Agregado a la lista de llamadas pendientes"),
+                              ),
+                            );
                           } else {
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                              content: Text("Hemos tenido un problema interno, intente nuevamente por favor."),
-                            ));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Hemos tenido un problema interno, intente nuevamente por favor."),
+                              ),
+                            );
                           }
                         });
                       },

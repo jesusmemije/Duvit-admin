@@ -757,12 +757,12 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
 
   void mostrarSnackbar( String mensaje ) {
 
-    final snackbar = SnackBar(
-      content: Text( mensaje ),
-      duration: Duration( milliseconds: 1500 ),
-    );
-
-    scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text( mensaje ),
+          duration: Duration( milliseconds: 1500 ),
+        ),
+      );
 
   }
 

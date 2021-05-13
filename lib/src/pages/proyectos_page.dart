@@ -60,7 +60,7 @@ class ProyectosPage extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     proyecto['detalleTarea'],
-                    maxLines: 2,
+                    maxLines: 50,
                     overflow: TextOverflow.ellipsis,
                     style: DuvitAppTheme.title,
                   ),
@@ -103,6 +103,19 @@ class ProyectosPage extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.pushNamed(context, 'agregar_tarea');
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 8.0, right: 4.0),
+            child: IconButton(
+              color: Colors.red,
+              icon: Icon(
+                Icons.group_add,
+                color: DuvitAppTheme.darkerText,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, 'proyecto_to_staff');
               },
             ),
           ),
