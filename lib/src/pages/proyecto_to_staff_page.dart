@@ -166,32 +166,28 @@ class _ProyectoToStaffPageState extends State<ProyectoToStaffPage> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 5.0),
-            child: RaisedButton.icon(
+            child: ElevatedButton.icon(
               icon: Icon(Icons.arrow_back),
               label:  Text('Regresar'),
               onPressed: (){
                 Navigator.pop(context);
               },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
               ),
-              color: Theme.of(context).primaryColor,
-              textColor: Colors.white,
             ),
           ),
         ),
         Expanded (
           child: Padding(
             padding: const EdgeInsets.only(left: 5.0),
-            child: RaisedButton.icon(
+            child: ElevatedButton.icon(
               icon: Icon(Icons.save),
               label:  Text('Guardar'),
               onPressed: ( _guardando ) ? null : _saveForm,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
               ),
-              color: Theme.of(context).primaryColor,
-              textColor: Colors.white,
             ),
           ),
         ),

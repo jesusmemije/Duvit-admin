@@ -111,16 +111,14 @@ class LoginPage extends StatelessWidget {
     return StreamBuilder(
       stream: bloc.formValidStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return RaisedButton(
+        return ElevatedButton(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
               child: Text('Ingresar'),
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            elevation: 0.0,
-            color: Theme.of(context).primaryColor,
-            textColor: Colors.white,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+            ),
             onPressed: snapshot.hasData ? () => _login(bloc, context) : null
         );
       },
