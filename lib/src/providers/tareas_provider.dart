@@ -12,7 +12,7 @@ class TareasProvider {
     final resp = await http.get( url );
   
     final Map<String, dynamic> decodedData = json.decode(resp.body);
-    final List<TareaModel> staffs = new List();
+    final List<TareaModel> staffs = [];
 
     decodedData.forEach((id, staff) {
 

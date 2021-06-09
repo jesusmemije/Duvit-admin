@@ -12,7 +12,7 @@ class StaffsProvider {
     final resp = await http.get(url);
 
     final Map<String, dynamic> decodedData = json.decode(resp.body);
-    final List<StaffModel> staffs = new List();
+    final List<StaffModel> staffs = [];
 
     if ( decodedData == null ) return [];
 
@@ -35,7 +35,7 @@ class StaffsProvider {
     final resp = await http.get( url );
 
     final Map<String, dynamic> decodedData = json.decode(resp.body);
-    final List<StaffModel> staffs = new List();
+    final List<StaffModel> staffs = [];
 
     decodedData.forEach((id, staff) {
 

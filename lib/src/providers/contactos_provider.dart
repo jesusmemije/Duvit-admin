@@ -12,7 +12,9 @@ class ContactosProvider {
     final resp = await http.get( url );
 
     final Map<String, dynamic> decodedData = json.decode(resp.body);
-    final List<ContactoModel> contactos = new List();
+    final List<ContactoModel> contactos = [];
+    //final List<ContactoModel> contactos = new List<ContactoModel>.empty();
+    //final List<ContactoModel> contactos = List<ContactoModel>.empty(growable: true);
 
     decodedData.forEach((id, contacto) {
 
