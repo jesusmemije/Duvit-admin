@@ -18,8 +18,8 @@ void mostrarAlerta(BuildContext context, String mensaje) {
         alertSubtitle: richSubtitle(mensaje),
         alertType: RichAlertType.WARNING,
         actions: <Widget>[
-          FlatButton(
-            color: Theme.of(context).primaryColor,
+          TextButton(
+            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)),
             child: Text(
               "OK", 
               style: TextStyle(

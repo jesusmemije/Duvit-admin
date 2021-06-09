@@ -63,7 +63,7 @@ class ContactoSearch extends SearchDelegate {
                 return ListTile(
                   leading: Container(
                     width: 60.0,
-                    child: new FlatButton(
+                    child: new TextButton(
                       onPressed: () => launch("tel://${ contacto.celular == '' ? contacto.telefonoCelular : contacto.celular }"),
                       child: new Icon(
                         Icons.call,
@@ -78,7 +78,7 @@ class ContactoSearch extends SearchDelegate {
                   ),
                   trailing: Container(
                     width: 60.0,
-                    child: new FlatButton(
+                    child: new TextButton(
                       onPressed: (){
                         final code = llamadasPendientesProvider.crearLlamadaPendiente( contacto );
                         code.then((value) {
