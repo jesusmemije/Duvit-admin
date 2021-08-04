@@ -6,29 +6,53 @@ String proyectoListModelToJson(ProyectoListModel data) => json.encode(data.toJso
 class ProyectoListModel {
   
     ProyectoListModel({
+        this.id,
         this.idPlaneacion,
         this.nombreProyecto,
+        this.nombreTarea,
+        this.requerimientos,
+        this.estatusPlaneacion,
+        this.fechaInicio,
+        this.fechaFin,
         this.detalleTarea,
         this.nombreStaff,
     });
 
-    int idPlaneacion;
-    String nombreProyecto;
-    String detalleTarea;
-    String nombreStaff;
+    String id = "";
+    int idPlaneacion = 0;
+    String nombreProyecto = "";
+    String nombreTarea = "";
+    String requerimientos = "";
+    String estatusPlaneacion = "";
+    String fechaInicio = "";
+    String fechaFin = "";
+    String detalleTarea = "";
+    String nombreStaff = "";
 
     factory ProyectoListModel.fromJson(Map<String, dynamic> json) => ProyectoListModel(
-        idPlaneacion   : json["idPlaneacion"],
-        nombreProyecto : json["nombreProyecto"],
-        detalleTarea   : json["detalleTarea"],
-        nombreStaff    : json["nombreStaff"],
+        id                : json["id"],
+        idPlaneacion      : json["idPlaneacion"],
+        nombreProyecto    : json["nombreProyecto"],
+        nombreTarea       : json["nombreTarea"],
+        requerimientos    : json["requerimientos"],
+        estatusPlaneacion : json["estatusPlaneacion"],
+        fechaInicio       : json["fechaInicio"],
+        fechaFin          : json["fechaFin"],
+        detalleTarea      : json["detalleTarea"],
+        nombreStaff       : json["nombreStaff"],
     );
 
     Map<String, dynamic> toJson() => {
-        "idPlaneacion"   : idPlaneacion,
-        "nombreProyecto" : nombreProyecto,
-        "detalleTarea"   : detalleTarea,
-        "nombreStaff"    : nombreStaff,
+        "id"                : id,
+        "idPlaneacion"      : idPlaneacion,
+        "nombreProyecto"    : nombreProyecto,
+        "nombreTarea"       : nombreTarea,
+        "requerimientos"    : requerimientos,
+        "estatusPlaneacion" : estatusPlaneacion,
+        "fechaInicio"       : fechaInicio,
+        "fechaFin"          : fechaFin,
+        "detalleTarea"      : detalleTarea,
+        "nombreStaff"       : nombreStaff,
     };
 }
 

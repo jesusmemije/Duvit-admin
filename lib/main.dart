@@ -1,3 +1,4 @@
+import 'package:duvit_admin/src/pages/descripcion_tareas_page.dart';
 import 'package:duvit_admin/src/pages/proyecto_to_staff_page.dart';
 import 'package:duvit_admin/src/pages/proyectos_page.dart';
 import 'package:duvit_admin/src/preferencias_usuario/preferencias_usuarios.dart';
@@ -13,6 +14,7 @@ import 'package:duvit_admin/src/bloc/provider.dart';
 import 'package:duvit_admin/src/pages/tareas_page.dart';
 import 'package:duvit_admin/src/pages/home_page.dart';
 import 'package:duvit_admin/src/pages/login_page.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 void main() async {
 
@@ -41,12 +43,13 @@ class MyApp extends StatelessWidget {
       systemNavigationBarDividerColor: Colors.grey,
       systemNavigationBarIconBrightness: Brightness.dark,
     ));*/
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    /*SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       //statusBarColor: Color.fromRGBO( 99, 0, 96, 1),
       statusBarColor: Color.fromRGBO( 148, 40, 142, 1),
       statusBarIconBrightness: Brightness.light,
-    ));
+    ));*/
 
+    FlutterStatusbarcolor.setStatusBarColor(Colors.white);
     return Provider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -62,14 +65,15 @@ class MyApp extends StatelessWidget {
         title: 'Duvit Admin',
         initialRoute: logeado == null || logeado == false ? 'login' : 'home',
         routes: {
-          'login'            : (BuildContext context) => LoginPage(),
-          'home'             : (BuildContext context) => HomePage(),
-          'tareas'           : (BuildContext context) => TareasPage(),
-          'historial_tareas' : (BuildContext context) => HistorialTareasPage(),
-          'llamadas'         : (BuildContext context) => LlamadasPage(),
-          'agregar_tarea'    : (BuildContext context) => AgregarTareaPage(),
-          'proyectos'        : (BuildContext context) => ProyectosPage(),
-          'proyecto_to_staff': (BuildContext context) => ProyectoToStaffPage(),
+          'login'             : (BuildContext context) => LoginPage(),
+          'home'              : (BuildContext context) => HomePage(),
+          'tareas'            : (BuildContext context) => TareasPage(),
+          'historial_tareas'  : (BuildContext context) => HistorialTareasPage(),
+          'llamadas'          : (BuildContext context) => LlamadasPage(),
+          'agregar_tarea'     : (BuildContext context) => AgregarTareaPage(),
+          'proyectos'         : (BuildContext context) => ProyectosPage(),
+          'proyecto_to_staff' : (BuildContext context) => ProyectoToStaffPage(),
+          'descripcion_tareas': (BuildContext context) => DescripcionTareasPage(),
         },
         theme: ThemeData(
           primaryColor: Color.fromRGBO( 148, 40, 142, 1),

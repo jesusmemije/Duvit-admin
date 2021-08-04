@@ -38,6 +38,7 @@ dependencies:
   grouped_list: ^3.4.0
   shared_preferences:
   rich_alert:
+  flutter_statusbarcolor: ^0.2.3
 
 dev_dependencies:
   flutter_test:

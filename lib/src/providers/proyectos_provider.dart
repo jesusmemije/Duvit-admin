@@ -7,14 +7,35 @@ class ProyectosProvider {
 
   final String _url = "http://www.duvitapp.com/WebService/v1";
 
-  Future<List> getProyectos() async {
+  Future<List<ProyectoModel>> getProyectos() async {
 
     final url      = '$_url/proyectos.php?type=get_projects';
     final response = await http.get(url);
-    
-    List listaProyectosByGroup = json.decode(response.body);
 
-    return listaProyectosByGroup;
+    final items = json.decode(response.body).cast<Map<String, dynamic>>();
+    List<ProyectoModel> listaProyectos = items.map<ProyectoModel>((json) {
+      return ProyectoModel.fromJson(json);
+    }).toList();
+
+    return listaProyectos;
+
+  }
+
+  Future<List<ProyectoListModel>> getTareasByProyecto( String idProject ) async {
+
+    final url      = '$_url/proyectos.php?type=get_tareas_by_project&id_project=' + idProject;
+    final response = await http.get(url);
+
+    final Map<String, dynamic> decodedData = json.decode(response.body);
+    final List<ProyectoListModel> tareas = [];
+    if ( decodedData == null ) return [];
+    decodedData.forEach((id, tarea) {
+      final staffTemp = ProyectoListModel.fromJson(tarea);
+      staffTemp.id = id;
+      tareas.add( staffTemp );
+    });
+
+    return tareas;
 
   }
 
