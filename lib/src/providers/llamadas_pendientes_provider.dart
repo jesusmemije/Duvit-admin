@@ -15,7 +15,7 @@ class LlamadasPendientesProvider {
     String idStaff = _prefs.idStaff;
     
     final url  = '$_url/llamadas-pendientes.php?type=insert&idStaff=$idStaff';
-    final resp = await http.post(url, body: contactoModelToJson( contacto ) );
+    final resp = await http.post( Uri.parse(url), body: contactoModelToJson( contacto ) );
 
     final decodedData = json.decode(resp.body);
 
@@ -32,7 +32,7 @@ class LlamadasPendientesProvider {
     String idStaff = _prefs.idStaff;
     
     final url  = '$_url/llamadas-pendientes.php?type=show&idStaff=$idStaff';
-    final response = await http.get( url );
+    final response = await http.get( Uri.parse(url) );
     
     List listaLlamadasPendientesByGroup = json.decode(response.body);
 
@@ -45,7 +45,7 @@ class LlamadasPendientesProvider {
     String idStaff = _prefs.idStaff;
     
     final url  = '$_url/llamadas-pendientes.php?type=delete&idStaff=$idStaff&iddelete=$id';
-    final resp = await http.get( url );
+    final resp = await http.get( Uri.parse(url) );
 
     final Map<String, dynamic> decodedData = json.decode(resp.body);
 

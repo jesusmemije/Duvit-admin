@@ -9,7 +9,7 @@ class TareasProvider {
   Future<List<TareaModel>> buscarTareasByIdStatus( String idstaff, int status ) async {
 
     final url = '$_url/tareas.php?idstaff=$idstaff&status=$status';
-    final resp = await http.get( url );
+    final resp = await http.get( Uri.parse(url) );
   
     final Map<String, dynamic> decodedData = json.decode(resp.body);
     final List<TareaModel> staffs = [];

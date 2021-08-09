@@ -9,7 +9,7 @@ class StaffsProvider {
   Future<List<StaffModel>> cargarStaffs() async {
 
     final url = '$_url/staffs.php';
-    final resp = await http.get(url);
+    final resp = await http.get( Uri.parse(url) );
 
     final Map<String, dynamic> decodedData = json.decode(resp.body);
     final List<StaffModel> staffs = [];
@@ -32,7 +32,7 @@ class StaffsProvider {
   Future<List<StaffModel>> buscarStaff( String query ) async {
 
     final url = '$_url/staffs.php?query=$query';
-    final resp = await http.get( url );
+    final resp = await http.get( Uri.parse(url) );
 
     final Map<String, dynamic> decodedData = json.decode(resp.body);
     final List<StaffModel> staffs = [];

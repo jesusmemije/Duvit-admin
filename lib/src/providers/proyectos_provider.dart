@@ -10,7 +10,7 @@ class ProyectosProvider {
   Future<List<ProyectoModel>> getProyectos() async {
 
     final url      = '$_url/proyectos.php?type=get_projects';
-    final response = await http.get(url);
+    final response = await http.get( Uri.parse(url) );
 
     final items = json.decode(response.body).cast<Map<String, dynamic>>();
     List<ProyectoModel> listaProyectos = items.map<ProyectoModel>((json) {
@@ -24,7 +24,7 @@ class ProyectosProvider {
   Future<List<ProyectoListModel>> getTareasByProyecto( String idProject ) async {
 
     final url      = '$_url/proyectos.php?type=get_tareas_by_project&id_project=' + idProject;
-    final response = await http.get(url);
+    final response = await http.get( Uri.parse(url) );
 
     final Map<String, dynamic> decodedData = json.decode(response.body);
     final List<ProyectoListModel> tareas = [];
@@ -42,7 +42,7 @@ class ProyectosProvider {
   Future<List<ProyectoModel>> buscarProyectosByStaffSinRelacion( String idstaff ) async {
 
     final url = '$_url/proyectos.php?type=search_projects&idstaff=$idstaff';
-    var response = await http.get(url);
+    var response = await http.get( Uri.parse(url) );
 
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
       List<ProyectoModel> listaProyectos = items.map<ProyectoModel>((json) {
@@ -57,7 +57,7 @@ class ProyectosProvider {
 
     final url = '$_url/proyectos.php?type=relationship';
 
-    final response = await http.post(url, body: proyectoToStaffModelToJson( proyectoToStaff ) );
+    final response = await http.post( Uri.parse(url), body: proyectoToStaffModelToJson( proyectoToStaff ) );
     final decodedData = json.decode(response.body);
 
     if ( decodedData['code'] == "201" ) {

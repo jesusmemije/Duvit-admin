@@ -11,7 +11,7 @@ class LoginProvider {
   Future<Map<String, dynamic>> login( String usuario, String password ) async {
 
     final url = '$_url/login.php?usuario=$usuario&password=$password';
-    final response = await http.get( url );
+    final response = await http.get( Uri.parse(url) );
     
     final Map<String, dynamic> decodedData = json.decode(response.body);
 

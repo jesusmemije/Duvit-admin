@@ -9,7 +9,7 @@ class AsistenciasProvider {
   Future<List> mostrarAsistenciasByDate( _fechaAsistencia ) async {
 
     final url = '$_url/asistencia.php?method=getAsistencias&date=$_fechaAsistencia';
-    final response = await http.get( url );
+    final response = await http.get( Uri.parse(url) );
     
     List listaAsistenciasByGroup = json.decode(response.body);
 
