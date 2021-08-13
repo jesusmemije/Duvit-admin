@@ -76,9 +76,10 @@ class MyApp extends StatelessWidget {
         },
         theme: ThemeData(
           primaryColor: Color.fromRGBO( 148, 40, 142, 1),
-          accentColor: Color.fromRGBO( 99, 0, 96, 1),
+          colorScheme: ColorScheme.light(
+            primary: Color.fromRGBO( 99, 0, 96, 1),
+          ),
         ),
-        
       ),
     );
   }

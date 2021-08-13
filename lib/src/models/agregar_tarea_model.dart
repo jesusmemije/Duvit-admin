@@ -184,38 +184,38 @@ String fodPlaneacionModelToJson(FodPlaneacionModel data) => json.encode(data.toJ
 class FodPlaneacionModel {
 
     FodPlaneacionModel({
-        this.idPlaneacion     = 0,
-        this.idEmpresa        = 0,
-        this.idResponsable    = 0,
-        this.idProyecto       = 0,
-        this.dias             = 0,
-        this.horas            = 0,
-        this.minutos          = 0,
-        this.fechaInicio      = "",
-        this.statusPlaneacion = 0,
-        this.fechaFin         = "",
-        this.idDependencia    = 0,
-        this.idTarea          = 0,
-        this.detalleTarea     = "",
-        this.requerimientos   = "",
-        this.fechaLimite      = "",
+        this.idPlaneacion,
+        this.idEmpresa,
+        this.idResponsable,
+        this.idProyecto,
+        this.dias = 0,
+        this.horas = 0,
+        this.minutos = 0,
+        this.fechaInicio,
+        this.statusPlaneacion,
+        this.fechaFin,
+        this.idDependencia,
+        this.idTarea,
+        this.detalleTarea,
+        this.requerimientos,
+        this.fechaLimite,
     });
 
-    int idPlaneacion;
-    int idEmpresa;
-    int idResponsable;
-    int idProyecto;
+    int idPlaneacion = 0;
+    int idEmpresa = 0;
+    int idResponsable = 0;
+    int idProyecto = 0;
     int dias;
     int horas;
     int minutos;
-    String fechaInicio;
-    int statusPlaneacion;
-    String fechaFin;
-    int idDependencia;
-    int idTarea;
-    String detalleTarea;
-    String requerimientos;
-    String fechaLimite;
+    String fechaInicio = "";
+    int statusPlaneacion = 0;
+    String fechaFin = "";
+    int idDependencia = 0;
+    int idTarea = 0;
+    String detalleTarea = "";
+    String requerimientos = "";
+    String fechaLimite = "";
 
     factory FodPlaneacionModel.fromJson(Map<String, dynamic> json) => FodPlaneacionModel(
         idPlaneacion     : json["idPlaneacion"],

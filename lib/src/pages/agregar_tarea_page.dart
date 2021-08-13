@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:duvit_admin/duvit_app_theme.dart';
 import 'package:duvit_admin/src/models/agregar_tarea_model.dart';
 import 'package:duvit_admin/src/models/staff_model.dart';
@@ -723,6 +725,7 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
   void _saveForm() {
 
     var form = formKey.currentState;
+    
     if ( !form.validate() ) return; 
     //Código cuando el formulario es válido...
     form.save();
@@ -739,14 +742,22 @@ class _AgregarTareaPageState extends State<AgregarTareaPage> {
       }
     });
 
-    Duration(milliseconds: 1500);
-
-    if ( staff != null ) {
-      Navigator.pop(context);
-      Navigator.pushNamed(context, 'tareas', arguments: staff);
-    } else {
-      Navigator.pop(context);
+    if ( form.mounted ) {
+      print("Form mounted is true");
+      setState(() {
+        // Your state change code goes here
+        form.reset();
+      });
     }
+
+    Timer.periodic(Duration(milliseconds: 3000), (timer) {
+      if ( staff != null ) {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, 'tareas', arguments: staff);
+      } else {
+        Navigator.pop(context);
+      }
+    });
 
     //setState(() { _guardando = false; });
   }

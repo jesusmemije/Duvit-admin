@@ -61,13 +61,13 @@ class _ProyectosPageState extends State<ProyectosPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.select_all,
+                Icons.add_task,
                 color: DuvitAppTheme.lightText,
                 size: 40.0,
               ),
               SizedBox(height: 8.0),
               Text(
-                'Seleccione un proyecto',
+                'Ningún proyecto seleccionado',
                 style: TextStyle(color: DuvitAppTheme.lightText),
               ),
             ],

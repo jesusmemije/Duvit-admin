@@ -37,6 +37,9 @@ class AgregarTareaProvider {
   Future<List<TareaModel>> buscarTareasByIdActividad( String idactividad ) async {
 
     final url = '$_url/agregar-tarea.php?tipo=buscar_tareas&idactividad=$idactividad';
+
+    print(url);
+    
     var response = await http.get( Uri.parse(url) );
 
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
